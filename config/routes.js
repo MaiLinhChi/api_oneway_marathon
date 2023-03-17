@@ -20,6 +20,7 @@ module.exports = [
   { method: 'GET', path: '/me', config: User.getMe },
 
     { method: 'POST', path: '/authenticate', config : User.postAuthenticate},
+    { method: 'POST', path: '/admin/authenticate', config : User.postAuthenticateAdmin},
     { method: 'POST', path: '/users', config : User.post},
     { method: 'POST', path: '/users/password/forgot', config : User.postPasswordForgot},
     { method: 'PUT', path: '/users/password/forgot', config : User.putPasswordForgot},

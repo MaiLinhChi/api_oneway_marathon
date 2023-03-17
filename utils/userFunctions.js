@@ -26,7 +26,7 @@ const hashPassword = (password, cb) => {
 const verifyCredentialsAdmin = (req, res) => {
     const { username, password } = req.payload;
 
-    return Model.findOne({ username }).then(user => {
+    return Model.findOne({ username, role: {$ne: 'user'} }).then(user => {
         // console.log(user)
         if (user) {
             return new Promise((resolve) => {
@@ -45,7 +45,7 @@ const verifyCredentialsAdmin = (req, res) => {
 }
 const verifyCredentials = (req, res) => {
     const { username, password } = req.payload;
-    return Model.findOne({ $or: [{username: username}, {email: username}]}).then(user => {
+    return Model.findOne({ $or: [{username: username}, {email: username, role: 'user'}]}).then(user => {
         // console.log(user)
         if (user) {
             return new Promise((resolve) => {
