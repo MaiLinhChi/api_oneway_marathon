@@ -29,12 +29,47 @@ const sendCodeVerify = (req, user) => {
             }}, { new: true })
     }).then(rs => ({statusCode: 200, message: 'Please check email to get verify code !'}))
 }
+const sendCodeResetPass = (req, user) => {
+    const code = Math.floor(1000 + Math.random() * 9000)
+    const msg = {
+        to: req.payload.email, // Change to your recipient
+        from: 'admin@onewaymarathon.com', // Change to your verified sender
+        subject: 'One Way register verify',
+        text: 'Your code to verify One Way account: ' + code,
+    }
+    return Sendgrid.send(msg).then(rs => {
+        return Model.findOneAndUpdate({ _id: user._id }, { $set: {
+                verifyEmail: code,
+                timeResendVerifyEmail: moment.utc().unix(),
+            }}, { new: true })
+    }).then(rs => ({statusCode: 200, message: 'Please check email to get verify code !'}))
+}
 module.exports = {
     putPasswordForgot: async (req) => {
-        return 1
+        const user = await Model.findOne({email: req.payload.email})
+        if(!user) return {statusCode: 400, message: 'email is not exist !', errorCode: 'EMAIL_NOT_EXISTED'};
+        if(user.verifyEmail !== req.payload.code) return {statusCode: 400, message: 'The code invalid !', errorCode: 'VERIFY_CODE_INVALID'};
+
+        // update
+        return new Promise(resolve => {
+            hashPassword(req.payload.password, (err, hash) => {
+                if (err) {
+                    resolve({statusCode: 500, message: 'server.error'})
+                }
+                user.password = hash;
+                user.updatedBy = 'reset password';
+                user.save().then(resolve).catch(e => {
+                    return { msg: e.toString() }
+                });
+            });
+        })
     },
     postPasswordForgot: async (req) => {
-       return 1
+        const user = await Model.findOne({email: req.payload.email})
+        if(!user) return {statusCode: 400, message: 'email is not exist !'};
+        const remainWaiting = moment.utc().unix() - user.timeResendVerifyEmail
+        if(remainWaiting < 120) return {statusCode: 400, message: 'Please wait in ' + remainWaiting + ' s'};
+        return sendCodeResetPass(req, user)
 
     },
     getById: (req) => {

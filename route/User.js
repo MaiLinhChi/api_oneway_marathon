@@ -134,8 +134,7 @@ module.exports = {
         },
         validate: {
             payload: Joi.object({
-                phone: Joi.string().required(),
-                regionCode: Joi.string().required()
+                email: Joi.string().required().email(),
             })
         }
     },
@@ -148,9 +147,8 @@ module.exports = {
         validate: {
             payload: Joi.object({
                 code: Joi.string().required(),
-                phone: Joi.string().required(),
+                email: Joi.string().required().email(),
                 password: Joi.string().required(),
-                regionCode: Joi.string().required()
             })
         }
     },
