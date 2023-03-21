@@ -30,10 +30,10 @@ const sendCodeVerify = (req, user) => {
     }).then(rs => ({statusCode: 200, message: 'Please check email to get verify code !'}))
 }
 module.exports = {
-    putPasswordForgot: async (req) => {
+    putPasswordForgot: (req) => {
         return 1
     },
-    postPasswordForgot: async (req) => {
+    postPasswordForgot: (req) => {
        return 1
 
     },
