@@ -4,6 +4,7 @@ const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 const moment = require('moment');
 const { string } = require('joi');
+const Joi = require("joi");
 
 const schema = new Schema({
     "name" : String,
@@ -12,13 +13,21 @@ const schema = new Schema({
     status: {type: String, default: 'pending'},
     race: [{
         name: String,
+        routeMap: String,
         distance: Number, // m
+        award: {
+            male: Number,
+            female: Number,
+        },
         price: [{
-            timeBuy: String,
-            time: String,
-            price: Number, // vnd
+            name: String,
+            startSell: String,
+            individual: Number,
+            group: Number, // vnd
         }]
     }],
+    location: String,
+    type: String,
     updatedAt: String,
     updatedBy: String,
     createdAt: String,

@@ -10,6 +10,9 @@ const rp            = require('request-promise')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const mUUID4 = MUUID.v4();
+const knex          = require('../config/mysqldb')
+const converter = require('json-2-csv');
+const fs = require('fs')
 
 const sendCodeVerify = (req, user) => {
     const code = Math.floor(1000 + Math.random() * 9000)
@@ -44,6 +47,25 @@ const sendCodeResetPass = (req, user) => {
             }}, { new: true })
     }).then(rs => ({statusCode: 200, message: 'Please check email to get verify code !'}))
 }
+const getSql = () => {
+    // knex.select(
+    //     'name', 'email', 'phone'
+    // ).from('users').limit(10).then(rs => {
+    //     console.log(rs)
+    // })
+    knex.select(
+        '*'
+    ).from('racing_pre_order_groups').join('racing_pre_orders', 'racing_pre_orders.group_id', 'racing_pre_order_groups.id').then(async rs => {
+        const csv = await converter.json2csv(rs);
+        fs.writeFileSync('oneway.csv', csv)
+    })
+    // knex.select(
+    //     'racing_change_ticket.*', 'users.name', 'users.email', 'users.phone'
+    // ).from('racing_change_ticket').join('users', 'users.id', 'racing_change_ticket.member_id').limit(100).then(rs => {
+    //     console.log(rs)
+    // })
+}
+// getSql()
 module.exports = {
     putPasswordForgot: async (req) => {
         const user = await Model.findOne({email: req.payload.email})

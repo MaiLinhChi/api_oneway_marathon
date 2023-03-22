@@ -4,6 +4,16 @@
 const Model = require('../model/Marathon')
 
 module.exports = {
+    putById: (req) => {
+        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
+    },
+    getById: (req) => {
+        return Model.findOne({_id: req.params.id}).then(item => {
+            return {
+                item
+            }
+        })
+    },
     get:  (req) => {
         const {name, status, fromDate, toDate} = req.query
         const options = {}
