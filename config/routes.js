@@ -4,6 +4,7 @@
 'use strict';
 const Pac = require('../package.json');
 const User = require('../route/User');
+const Marathon = require('../route/Marathon');
 
 module.exports = [
   {
@@ -27,5 +28,8 @@ module.exports = [
     { method: 'GET', path: '/admin/users', config : User.get},
     { method: 'GET', path: '/users/{id}', config : User.getById},
     { method: 'PUT', path: '/password', config : User.putPassword},
+
+    { method: 'POST', path: '/marathons', config : Marathon.post},
+    { method: 'GET', path: '/marathons', config : Marathon.get},
 
 ];

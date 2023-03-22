@@ -53,7 +53,7 @@ const verifyCredentials = (req, res) => {
                     if (err) res.response({statusCode: 400, message: 'Incorrect Password!'});
                     // console.log(err)
                     if (isValid) {
-                        resolve({user: {...user._doc, admin: 1}});
+                        resolve({user: {...user._doc}});
                     } else {
                         resolve({statusCode: 400, message: 'Invalid credentials!'})
                     }
