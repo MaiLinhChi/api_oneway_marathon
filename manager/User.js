@@ -137,11 +137,11 @@ module.exports = {
                 userId:  mUUID4.toString(_id)
                 }
             })
-            return Response.resOK({
+            return {
                 totalRecord,
                 totalPaging: Math.ceil(totalRecord / limit),
                 data: newRes
-            },true)
+            }
         })
     },
     post: async (req) => {
