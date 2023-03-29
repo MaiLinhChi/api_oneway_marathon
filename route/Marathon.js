@@ -77,7 +77,7 @@ module.exports = {
             }).options({allowUnknown: true}),
             query: Joi.object({
                 name: Joi.string(),
-                status: Joi.string().valid('success', 'reject', 'pending'),
+                status: Joi.string().valid('active', 'deactive'),
                 fromDate: Joi.string().optional(),
                 toDate: Joi.string().optional(),
                 limit: Joi.number().default(20),

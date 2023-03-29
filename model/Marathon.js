@@ -11,7 +11,7 @@ const schema = new Schema({
     "description": String,
     "startTime": String,
     "image": String,
-    status: {type: String, default: 'pending'},
+    status: {type: String, default: 'active'},
     race: [{
         name: String,
         routeMap: String,
