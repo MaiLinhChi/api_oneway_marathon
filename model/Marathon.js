@@ -10,6 +10,7 @@ const schema = new Schema({
     "name" : String,
     "description": String,
     "startTime": String,
+    "image": String,
     status: {type: String, default: 'pending'},
     race: [{
         name: String,

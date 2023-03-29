@@ -22,10 +22,25 @@ module.exports = {
                 id: Joi.string().required(),
             }),
             payload: Joi.object({
-                description: Joi.string(),
-                race: Joi.string(),
-                status: Joi.string().valid('active', 'deactive'),
-                startTime: Joi.string(),
+                name: Joi.string().optional(),
+                image: Joi.string().optional(),
+                description: Joi.string().optional(),
+                race: Joi.array().min(1).items(Joi.object({
+                    distance: Joi.number().required().description('race track length in meters'),
+                    routeMap: Joi.string().required().description('image router map'),
+                    award: Joi.object({
+                        male: Joi.number().min(1000).required().description('award on vnd'),
+                        female: Joi.number().min(1000).required().description('award on vnd'),
+                    }),
+                    price: Joi.array().min(1).items(Joi.object({
+                        name: Joi.string().required(),
+                        startSell: Joi.string().required(),
+                        individual: Joi.number().min(1000).required().description('price tiket on vnd'),
+                        group: Joi.number().min(1000).required().description('award on vnd'),
+                    }))
+                })).optional(),
+                status: Joi.string().valid('active', 'deactive').optional(),
+                startTime: Joi.string().optional(),
             })
         }
     },
@@ -84,6 +99,7 @@ module.exports = {
         validate: {
             payload: Joi.object({
                 name: Joi.string().required(),
+                image: Joi.string().required(),
                 description: Joi.string().required(),
                 startTime: Joi.string().required(),
                 location: Joi.string().required(),
@@ -101,7 +117,7 @@ module.exports = {
                         startSell: Joi.string().required(),
                         individual: Joi.number().min(1000).required().description('price tiket on vnd'),
                         group: Joi.number().min(1000).required().description('award on vnd'),
-                    }))
+                    })).optional()
                 })).required(),
             }),
             headers: Joi.object({

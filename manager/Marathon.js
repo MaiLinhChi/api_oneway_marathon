@@ -39,8 +39,12 @@ module.exports = {
     post: (req) => {
         const model = new Model({
             name: req.payload.name,
+            image: req.payload.image,
             description: req.payload.description,
             startTime: req.payload.startTime,
+            type: req.payload.type,
+            location: req.payload.location,
+            race: req.payload.race
         })
         return model.save()
     },

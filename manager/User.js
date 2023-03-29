@@ -105,20 +105,20 @@ module.exports = {
         const {keyword, status, Name, PhoneNumber, Email, UserName, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = { role: {$ne: 'admin'}, UserName: {$ne: 'admin'}}
         const keywordCondition = keyword ? { $or:[
-            { UserName: { $regex: keyword, $options: 'i'} },
-            { PhoneNumber: { $regex: keyword, $options: 'i'} },
-            { Email: { $regex: keyword, $options: 'i'} },
-            { Name: { $regex: keyword, $options: 'i'} },         
+            { username: { $regex: keyword, $options: 'i'} },
+            { mobile: { $regex: keyword, $options: 'i'} },
+            { email: { $regex: keyword, $options: 'i'} },
+            { name: { $regex: keyword, $options: 'i'} },         
         ]} : {} 
         const skip =  pageIndex - 1 || 0
         const limit = pageSize || 20
         const sort = req.query.sort || 'asc'
 
         if(status) options.status = status
-        if(Name) options.Name = { $regex: new RegExp(req.query.Name), $options: 'i' }
-        if(UserName) options.UserName = UserName
-        if(PhoneNumber) options.PhoneNumber = PhoneNumber
-        if(Email) options.Email = Email
+        if(Name) options.name = { $regex: new RegExp(req.query.Name), $options: 'i' }
+        if(UserName) options.userName = UserName
+        if(PhoneNumber) options.mobile = PhoneNumber
+        if(Email) options.email = Email
         // if(fromDate && toDate) options.CreatedOn = {$gte: new Date(fromDate), $lte: new Date(toDate)}
         if(fromDate || toDate) options.CreatedOn = {}
         if(fromDate) options.CreatedOn.$gte =  new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY"))
