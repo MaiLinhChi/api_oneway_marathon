@@ -32,6 +32,7 @@ module.exports = {
             
             return {
                 data: rs,
+                totalRecord,
                 totalPage: Math.ceil(totalRecord / limit),
             }
         })
@@ -44,7 +45,11 @@ module.exports = {
             startTime: req.payload.startTime,
             type: req.payload.type,
             location: req.payload.location,
-            race: req.payload.race
+            race: req.payload.race,
+            registerGroup: req.payload.registerGroup,
+            raceKit: req.payload.raceKit,
+            service: req.payload.service,
+            schedule: req.payload.schedule
         })
         return model.save()
     },
