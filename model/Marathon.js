@@ -10,10 +10,11 @@ const schema = new Schema({
     "name" : String,
     "description": String,
     "startTime": String,
-    status: {type: String, default: 'pending'},
+    "image": String,
+    status: {type: String, default: 'active'},
     race: [{
-        name: String,
         routeMap: String,
+        image: String,
         distance: Number, // m
         award: {
             male: Number,
@@ -25,6 +26,30 @@ const schema = new Schema({
             individual: Number,
             group: Number, // vnd
         }]
+    }],
+    registerGroup: [{
+        numberPerson: {
+            from: Number,
+            to: Number
+        },
+        percent: Number,
+    }],
+    raceKit: [],
+    service: {
+        image: String,
+        description: String,
+    },
+    schedule: [{
+        title: String,
+        description: String,
+        detail: [{
+            time: String,
+            description: String,
+        }],
+    }],
+    regulation: [{
+        title: String,
+        description: String,
     }],
     location: String,
     type: String,
