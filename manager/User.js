@@ -168,7 +168,7 @@ module.exports = {
 
     },
     getMe: (req) => {
-        return Model.findOne({UserName: req.auth.credentials.user.UserName})
+        return Model.findOne({username: req.auth.credentials.user.username})
     },
     putPassword: async (req) => {
         const user = await Model.findOne({
