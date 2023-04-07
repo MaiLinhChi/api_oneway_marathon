@@ -108,7 +108,7 @@ module.exports = {
             { username: { $regex: keyword, $options: 'i'} },
             { mobile: { $regex: keyword, $options: 'i'} },
             { email: { $regex: keyword, $options: 'i'} },
-            { name: { $regex: keyword, $options: 'i'} },         
+            { name: { $regex: keyword, $options: 'i'} },  
         ]} : {} 
         const skip =  pageIndex - 1 || 0
         const limit = pageSize || 20

@@ -5,6 +5,7 @@
 const Pac = require('../package.json');
 const User = require('../route/User');
 const Marathon = require('../route/Marathon');
+const Bib = require('../route/Bib');
 
 module.exports = [
   {
@@ -33,5 +34,10 @@ module.exports = [
     { method: 'GET', path: '/marathons', config : Marathon.get},
     { method: 'GET', path: '/marathons/{id}', config : Marathon.getById},
     { method: 'PUT', path: '/marathons/{id}', config : Marathon.putById},
+
+    { method: 'POST', path: '/bib', config : Bib.post},
+    { method: 'GET', path: '/bib', config : Bib.get},
+    { method: 'GET', path: '/bib/{id}', config : Bib.getById},
+    { method: 'PUT', path: '/bib/{id}', config : Bib.putById},
 
 ];
