@@ -13,8 +13,12 @@ const schema = new Schema({
  birthday: String,
  gender: String,
  nationality: String,
- passport: String,
- phone: String,
+ passport: Number,
+ gateway: String,
+ bankCode: String,
+ paymentCode: String,
+ phone: Number,
+ state: String,
  address: String,
  emergencyContactName: String,
  emergencyContactPhone: Number,
@@ -28,7 +32,7 @@ const schema = new Schema({
 });
 
 schema.pre("save", function (next) {
- const now = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+ const now = moment(moment().unix() * 1000).format("YYYY-MM-DD HH:mm:ss");
  if (!this.createdAt) {
   this.createdAt = now;
  }

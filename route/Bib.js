@@ -12,7 +12,6 @@ module.exports = {
         },
         auth: {
             strategy: 'jwt',
-            scope: ['admin']
         },
         validate: {
             headers: Joi.object({
@@ -22,10 +21,10 @@ module.exports = {
                 id: Joi.string().required(),
             }),
             payload: Joi.object({
-                email: Joi.string().optional(),
-                marathon: Joi.string().optional(),
-                status: Joi.string().default('Pending').optional(),
-                price: Joi.string().optional(),
+                gateway: Joi.string().optional(),
+                bankCode: Joi.string().optional(),
+                price: Joi.number().optional(),
+                status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
             })
         }
     },
@@ -64,7 +63,7 @@ module.exports = {
                 keyword: Joi.string().optional(),
                 email: Joi.string().optional(),
                 marathon: Joi.string().optional(),
-                status: Joi.string().valid('pay', 'pending', 'unpay').optional(),
+                status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
                 price: Joi.string().optional(),
                 fromDate: Joi.string().optional(),
                 toDate: Joi.string().optional(),
@@ -88,12 +87,13 @@ module.exports = {
                 email: Joi.string().required(),
                 marathon: Joi.string().required(),
                 price: Joi.number().required(),
+                state: Joi.string().required(),
                 distance: Joi.number().required(),
                 fullName: Joi.string().required(),
                 birthday: Joi.string().required(),
                 gender: Joi.string().valid('male', 'female').required(),
                 nationality: Joi.string().required(),
-                passport: Joi.string().required(),
+                passport: Joi.number().required(),
                 phone: Joi.number().required(),
                 address: Joi.string().required(),
                 emergencyContactName: Joi.string().required(),
