@@ -103,7 +103,7 @@ module.exports = {
     },
     get:  (req) => {
         const {keyword, status, Name, PhoneNumber, Email, UserName, fromDate, toDate, pageSize, pageIndex} = req.query
-        const options = { role: {$ne: 'admin'}, UserName: {$ne: 'admin'}}
+        const options = {}
         const keywordCondition = keyword ? { $or:[
             { username: { $regex: keyword, $options: 'i'} },
             { mobile: { $regex: keyword, $options: 'i'} },

@@ -6,6 +6,7 @@ const Pac = require('../package.json');
 const User = require('../route/User');
 const Marathon = require('../route/Marathon');
 const Bib = require('../route/Bib');
+const PaymentMethod = require('../route/PaymentMethod');
 
 module.exports = [
   {
@@ -40,4 +41,8 @@ module.exports = [
     { method: 'GET', path: '/bib/{id}', config : Bib.getById},
     { method: 'PUT', path: '/bib/{id}', config : Bib.putById},
 
+    { method: 'POST', path: '/payment-method', config : PaymentMethod.post},
+    { method: 'GET', path: '/payment-method', config : PaymentMethod.get},
+    { method: 'GET', path: '/payment-method/{id}', config : PaymentMethod.getById},
+    { method: 'PUT', path: '/payment-method/{id}', config : PaymentMethod.putById},
 ];

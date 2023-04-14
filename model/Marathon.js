@@ -59,7 +59,7 @@ const schema = new Schema({
 });
 
 schema.pre("save", function (next) {
-    const now = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+    const now = moment(moment().unix() * 1000).format("YYYY-MM-DD HH:mm:ss");
     if (!this.createdAt) {
         this.createdAt = now;
     }

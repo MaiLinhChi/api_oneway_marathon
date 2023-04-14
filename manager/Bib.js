@@ -5,21 +5,34 @@ const Model = require('../model/Bib')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const mUUID4 = MUUID.v4();
+const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: (req) => {
+        if(req.payload.bankCode) {
+            const url = vnpayPaymentMethod('dev', req.payload.bankCode, req.payload.price, moment().format('DDHHmmss'), '127.0.0.1');
+            req.payload.status = "processing";
+            return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+                return {
+                    data: item,
+                    url,
+                    status: 200
+                }
+            })
+        }
         return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
     },
     getById: (req) => {
-        return Model.findOne({UserName: req.params.id}).then(item => {
+        return Model.findOne({_id: req.params.id}).then(item => {
             return {
-                item
+                data: item,
+                status: 200
             }
         })
     },
     get:  (req) => {
         const {keyword, status, email, marathons, price, fromDate, toDate, pageSize, pageIndex} = req.query
-        const options = { role: {$ne: 'admin'}, UserName: {$ne: 'admin'}}
+        const options = {}
         const keywordCondition = keyword ? { $or:[
             { username: { $regex: keyword, $options: 'i'} },
             { mobile: { $regex: keyword, $options: 'i'} },
@@ -38,15 +51,13 @@ module.exports = {
         if(fromDate || toDate) options.CreatedOn = {}
         if(fromDate) options.CreatedOn.$gte =  new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY"))
         if(toDate) options.CreatedOn.$lte =  new Date(moment(toDate, 'DD/MM/YYYY').format("MM/DD/YYYY"))
-        console.log(new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
-        console.log(new Date(moment(toDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
         
         return Model.find({$and: [options, keywordCondition]}).limit(limit).skip(skip * limit).sort({
             CreatedOn: sort
         }).then(async rs => {
             const totalRecord = await Model.countDocuments({$and: [options, keywordCondition]})
             const newRes = rs.map(r=>{
-                const {_id, ...res} = r._doc
+                const {...res} = r._doc
                 return {
                 ...res,
                 }
@@ -59,13 +70,18 @@ module.exports = {
         })
     },
     post: async (req) => {
-        const bib = await Model.find({distance: req.payload.distance, marathon: req.payload.marathon});
-        const isHaving = await bib.find((item) => item.email === req.payload.email);
-        if(isHaving) {
-            if(isHaving) return {statusCode: 400, message: 'Email is existed !', errorCode: 'EMAIL_EXISTED'};
+        const bib = await Model.find({marathon: req.payload.marathon});
+        const isHaving = bib.find((item) => item.email === req.payload.email || item.phone === req.payload.phone || item.passport === req.payload.passport);
+        if(isHaving && isHaving.email === req.payload.email) {
+            return {statusCode: 400, message: 'Email is existed !', errorCode: 'EMAIL_EXISTED'};
+        } else if(isHaving && isHaving.phone === req.payload.phone) {
+            return {statusCode: 400, message: 'Phone is existed !', errorCode: 'PHONE_EXISTED'};
+        } else if(isHaving && isHaving.passport === req.payload.passport) {
+            return {statusCode: 400, message: 'Passport is existed !', errorCode: 'PASSPORT_EXISTED'};
         }
         const model = new Model({
             email: req.payload.email,
+            state: req.payload.state,
             marathon: req.payload.marathon,
             price: req.payload.price,
             distance: req.payload.distance,
@@ -83,7 +99,7 @@ module.exports = {
             timeEstimation: req.payload.timeEstimation,
         })
         return new Promise(resolve => {
-            model.save().then(() => resolve({status: 200, message: "Register suscess"})).catch(e => {
+            model.save().then((obj) => resolve({status: 200, message: "Register suscess", data: obj})).catch(e => {
                 resolve({statusCode: 400, message: e.toString()})
             })
         })
