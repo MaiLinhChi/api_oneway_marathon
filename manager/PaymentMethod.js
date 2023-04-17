@@ -4,8 +4,20 @@
 const Model = require('../model/PaymentMethod')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
+const { default: mongoose } = require('mongoose');
 
 module.exports = {
+    deleteById: async (req) => {
+        const {id} = req.params
+        try{
+            if (!mongoose.Types.ObjectId.isValid(id)) return {message: `No brand with id: ${id}`, statusCode: 404};
+            const ins = await Model.findByIdAndDelete({_id: id});
+            if(!ins) return {message: 'Not found brand', status: false, statusCode: 404, messageKey: 'brand_not_found', data: ins};
+            return {message: 'success', data: ins, statusCode: 200, messageKey: 'delete_brand_success'};
+        } catch (error) {
+            return error
+        }
+    },
     putById: (req) => {
         if(req.payload.bankCode) {
             let name

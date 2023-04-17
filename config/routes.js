@@ -45,4 +45,5 @@ module.exports = [
     { method: 'GET', path: '/payment-method', config : PaymentMethod.get},
     { method: 'GET', path: '/payment-method/{id}', config : PaymentMethod.getById},
     { method: 'PUT', path: '/payment-method/{id}', config : PaymentMethod.putById},
+    { method: 'DELETE', path: '/payment-method/{id}', config : PaymentMethod.deleteById},
 ];

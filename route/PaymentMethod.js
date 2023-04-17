@@ -4,6 +4,25 @@ const Manager                   = require('../manager/PaymentMethod');
 const Response                  = require('./response').setup(Manager);
 
 module.exports = {
+    deleteById: {
+        tags: ['api', 'Payment method'],
+        description: 'Delete payment method by id',
+        handler: (req, res) => {
+            return Response(req, res, 'deleteById')
+        },
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin']
+        },
+        validate: {
+            headers: Joi.object({
+                authorization: Joi.string().required()
+            }).options({allowUnknown: true}),
+            params: Joi.object({
+                id: Joi.string().required()
+            }),
+        }
+    },
     putById: {
         tags: ['api', 'Payment method'],
         description: 'Update payment method By id',
@@ -24,6 +43,7 @@ module.exports = {
                 gateway: Joi.string().optional(),
                 bankCode: Joi.string().optional(),
                 fee: Joi.number().optional(),
+                name: Joi.string().optional(),
                 feePercent: Joi.number().optional(),
                 isDefault: Joi.boolean().default(false).optional(),
                 status: Joi.string().default('pending').optional(),
@@ -90,7 +110,7 @@ module.exports = {
                 fee: Joi.number().required(),
                 feePercent: Joi.number().required(),
                 isDefault: Joi.boolean().valid(false, true).optional(),
-                status: Joi.string().valid('pending', 'active', 'deactive').optional(),
+                // status: Joi.string().valid('pending', 'active', 'deactive').optional(),
             }),
             headers: Joi.object({
                 authorization: Joi.string().required()
