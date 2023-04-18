@@ -16,7 +16,7 @@ const schema = new Schema({
  passport: Number,
  gateway: String,
  bankCode: String,
- paymentCode: String,
+ txnRef: String,
  phone: Number,
  state: String,
  address: String,

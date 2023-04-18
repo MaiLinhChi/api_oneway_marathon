@@ -11,6 +11,7 @@ module.exports = {
     putById: (req) => {
         if(req.payload.bankCode) {
             const url = vnpayPaymentMethod('dev', req.payload.bankCode, req.payload.price, moment().format('DDHHmmss'), '127.0.0.1');
+            req.payload.txnRef = url.vnp_TxnRef
             req.payload.status = "processing";
             return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
                 return {
