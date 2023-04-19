@@ -14,24 +14,6 @@ const knex          = require('../config/mysqldb')
 const converter = require('json-2-csv');
 const fs = require('fs')
 
-const sendCodeVerify = (req, user) => {
-    const code = Math.floor(1000 + Math.random() * 9000)
-    const msg = {
-        to: req.payload.email, // Change to your recipient
-        from: 'admin@onewaymarathon.com', // Change to your verified sender
-        subject: 'One Way register verify',
-        text: 'Your code to verify One Way account: ' + code,
-        // html: '',
-    }
-    return Sendgrid.send(msg).then(rs => {
-        return Model.findOneAndUpdate({ _id: user._id }, { $set: {
-                verifyEmail: code,
-                verified: false,
-                resendVerifyEmail: user.resendVerifyEmail + 1,
-                timeResendVerifyEmail: moment.utc().unix(),
-            }}, { new: true })
-    }).then(rs => ({statusCode: 200, message: 'Please check email to get verify code !'}))
-}
 const sendCodeResetPass = (req, user) => {
     const code = Math.floor(1000 + Math.random() * 9000)
     const msg = {
