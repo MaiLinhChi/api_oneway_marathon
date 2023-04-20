@@ -7,7 +7,6 @@ const { sortObject } = require("../utils/payment");
 const querystring = require("qs");
 const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
-const { sendEmail } = require('../utils/sendEmail');
 
 module.exports = {
     getIpn: async (req) => {
@@ -19,8 +18,6 @@ module.exports = {
         const hmac = crypto.createHmac("sha512", secretKey);
         const signed = hmac.update(signData, "utf-8").digest("hex");
         const paymentedModel = await BibModel.findOne({ txnRef: req.query.vnp_TxnRef });
-        const data = await sendEmail(paymentedModel.email)
-        console.log(data);
         if (!paymentedModel) {
             return { message: "Order not found", status: 400, RspCode: 1 };
         }

@@ -19,26 +19,6 @@ module.exports = {
         }
     },
     putById: (req) => {
-        if(req.payload.bankCode) {
-            let name
-            switch(req.payload.bankCode) {
-                case "VNPAYQR":
-                    name = "Thanh toán quét mã QR"
-                    break;
-                case "VNBANK":
-                    name = "Thẻ ATM - Tài khoản ngân hàng nội địa"
-                    break;
-                case "INTCARD":
-                    name = "Thẻ thanh toán quốc tế"
-                    break;
-                case "VNMART":
-                    name = "Thẻ VISA/Mastercard"
-                    break;
-                default:
-                    name = ""
-            }
-            return Model.findOneAndUpdate({_id: req.params.id}, {...req.payload, name}, {new: true})
-        }
         return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
     },
     getById: (req) => {

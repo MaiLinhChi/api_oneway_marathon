@@ -6,9 +6,16 @@ const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const mUUID4 = MUUID.v4();
 const {vnpayPaymentMethod} = require("../utils/payment");
+const Sendgrid = require('../utils/sendgrid')
 
 module.exports = {
     putById: (req) => {
+        const msg = {
+            to: req.payload.email, // Change to your recipient
+            from: 'admin@onewaymarathon.com', // Change to your verified sender
+            subject: 'One Way register verify',
+            text: 'Your code to verify One Way account: ',
+        }
         if(req.payload.bankCode) {
             const url = vnpayPaymentMethod('dev', req.payload.bankCode, req.payload.price, req.params.id, '127.0.0.1');
             req.payload.txnRef = url.vnp_TxnRef

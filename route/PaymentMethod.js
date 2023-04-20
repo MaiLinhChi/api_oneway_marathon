@@ -108,9 +108,9 @@ module.exports = {
                 gateway: Joi.string().required(),
                 bankCode: Joi.string().required(),
                 fee: Joi.number().required(),
+                name: Joi.string().required(),
                 feePercent: Joi.number().required(),
                 isDefault: Joi.boolean().valid(false, true).optional(),
-                // status: Joi.string().valid('pending', 'active', 'deactive').optional(),
             }),
             headers: Joi.object({
                 authorization: Joi.string().required()
