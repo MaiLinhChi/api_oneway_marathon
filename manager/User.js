@@ -3,7 +3,7 @@
 
 const { hashPassword } = require('../utils/userFunctions');
 const bcrypt = require('bcrypt');
-const Sendgrid = require('../utils/sendgrid')
+const Sendgrid = require('../utils/sendgrid.js')
 const Model = require('../model/User')
 const LogModel = require('../model/Logs')
 const rp            = require('request-promise')

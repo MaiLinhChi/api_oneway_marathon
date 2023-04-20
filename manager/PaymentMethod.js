@@ -10,35 +10,15 @@ module.exports = {
     deleteById: async (req) => {
         const {id} = req.params
         try{
-            if (!mongoose.Types.ObjectId.isValid(id)) return {message: `No brand with id: ${id}`, statusCode: 404};
+            if (!mongoose.Types.ObjectId.isValid(id)) return {message: `No brand with id: ${id}`, status: 404};
             const ins = await Model.findByIdAndDelete({_id: id});
-            if(!ins) return {message: 'Not found brand', status: false, statusCode: 404, messageKey: 'brand_not_found', data: ins};
-            return {message: 'success', data: ins, statusCode: 200, messageKey: 'delete_brand_success'};
+            if(!ins) return {message: `No brand with id: ${id}`, status: 404, data: ins};
+            return {message: 'Delete payment method successfully', data: ins, status: 200};
         } catch (error) {
             return error
         }
     },
     putById: (req) => {
-        if(req.payload.bankCode) {
-            let name
-            switch(req.payload.bankCode) {
-                case "VNPAYQR":
-                    name = "Thanh toán quét mã QR"
-                    break;
-                case "VNBANK":
-                    name = "Thẻ ATM - Tài khoản ngân hàng nội địa"
-                    break;
-                case "INTCARD":
-                    name = "Thẻ thanh toán quốc tế"
-                    break;
-                case "VNMART":
-                    name = "Thẻ VISA/Mastercard"
-                    break;
-                default:
-                    name = ""
-            }
-            return Model.findOneAndUpdate({_id: req.params.id}, {...req.payload, name}, {new: true})
-        }
         return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
     },
     getById: (req) => {
@@ -91,28 +71,11 @@ module.exports = {
         })
     },
     post: (req) => {
-        let name;
-        switch(req.payload.bankCode) {
-            case "VNPAYQR":
-                name = "Thanh toán quét mã QR"
-                break;
-            case "VNBANK":
-                name = "Thẻ ATM - Tài khoản ngân hàng nội địa"
-                break;
-            case "INTCARD":
-                name = "Thẻ thanh toán quốc tế"
-                break;
-            case "VNMART":
-                name = "Thẻ VISA/Mastercard"
-                break;
-            default:
-                name = ""
-        }
         const model = new Model({
             gateway: req.payload.gateway,
             bankCode: req.payload.bankCode,
             fee: req.payload.fee,
-            name: name,
+            name: req.payload.name,
             feePercent: req.payload.feePercent,
             isDefault: req.payload.isDefault,
             status: req.payload.status,
