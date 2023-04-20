@@ -5,9 +5,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 module.exports = {
     send: (msg) => {
-        return sgMail.send(msg).then((rs) => {
-            console.log('Email sent', rs)
-        }).catch((error) => {
+        return sgMail.send(msg).then((rs) => rs).catch((error) => {
             console.error('sendgrid', error.response.body)
         })
     }

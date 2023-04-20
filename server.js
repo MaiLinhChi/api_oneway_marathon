@@ -13,7 +13,7 @@ const Manifest  = require('./config/manifest');
 const AppConfig = require('./config/app');
 const mongoose = require("mongoose");
 const parse = require('parse-duration')
-const dbUrl = require("./config/mongodb")
+const dbUrl = require("./config/mongodb");
 const {port}      = Manifest.server
 
 const startServer = async () => {
