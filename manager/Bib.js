@@ -9,7 +9,7 @@ const {vnpayPaymentMethod} = require("../utils/payment");
 const Sendgrid = require('../utils/sendgrid')
 
 module.exports = {
-    putById: (req) => {
+    putById: async (req) => {
         const msg = {
             to: req.payload.email, // Change to your recipient
             from: 'admin@onewaymarathon.com', // Change to your verified sender
@@ -17,8 +17,15 @@ module.exports = {
             text: 'Your code to verify One Way account: ',
         }
         if(req.payload.bankCode) {
+            const comfirmed = await Model.findOne({_id: req.params.id});
+            if(comfirmed.status === "comfirmed") {
+                return {
+                    message: "Order already confirmed",
+                    status: 400
+                }
+            }
             const url = vnpayPaymentMethod('dev', req.payload.bankCode, req.payload.price, req.params.id, '127.0.0.1');
-            req.payload.txnRef = url.vnp_TxnRef
+            req.payload.txnRef = url.vnp_TxnRef;
             req.payload.status = "processing";
             return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
                 return {

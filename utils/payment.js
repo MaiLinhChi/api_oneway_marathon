@@ -179,8 +179,8 @@ module.exports = {
     momoPaymentMethod: (env,amount, code, url) => {
         return momo(env, amount, code, url)
     },
-    vnpayPaymentMethod: (env, method, amount, code, url, ip) => {
-        return vnpayPaymentMethod(env, method, amount, code, url, ip)
+    vnpayPaymentMethod: (env, method, amount, code, ip) => {
+        return vnpayPaymentMethod(env, method, amount, code, ip)
     },
     sortObject
 }
