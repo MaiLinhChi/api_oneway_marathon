@@ -10,7 +10,9 @@ module.exports = {
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(item => {
             return {
-                item
+                message: "Get marathon detail successfully",
+                data: item,
+                status: 200
             }
         })
     },
@@ -32,6 +34,8 @@ module.exports = {
             
             return {
                 data: rs,
+                status: 200,
+                message: "Get list marathons successfully",
                 totalRecord,
                 totalPage: Math.ceil(totalRecord / limit),
             }
