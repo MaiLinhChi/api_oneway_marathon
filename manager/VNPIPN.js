@@ -19,16 +19,16 @@ module.exports = {
         const signed = hmac.update(signData, "utf-8").digest("hex");
         const paymentedModel = await BibModel.findOne({ txnRef: req.query.vnp_TxnRef });
         if (!paymentedModel) {
-            return { message: "Order not found", status: 400, RspCode: 1 };
-        }
-        if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
-            return { message: "Invalid amount", status: 400, RspCode: 4 };
+            return { message: "Order not found", RspCode: '01' };
         }
         if (paymentedModel.status === "comfirmed") {
-            return { message: "Order already confirmed", status: 400, RspCode: 2 };
+            return { message: "Order already confirmed", RspCode: '02' };
+        }
+        if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
+            return { message: "Invalid amount", RspCode: '04' };
         }
         if (req.query.vnp_SecureHash !== signed) {
-            return { message: "Invalid signature", status: 400, RspCode: 97 };
+            return { message: "Invalid signature", RspCode: '97' };
         }
         const model = new IpnModel({
             txnRef: req.query.vnp_TxnRef,
@@ -38,9 +38,9 @@ module.exports = {
         const ipn = await model.save();
         const bib = await paymentedModel.updateOne({ status: "comfirmed" });
         if (!bib || !ipn) {
-            return { message: "Unknow error", status: 400, RspCode: 99 };
+            return { message: "Unknow error", RspCode: '99' };
         }
-        return { message: "Confirm Success", status: 400, RspCode: 0 };
+        return { message: "Confirm Success", RspCode: '00' };
     },
     get: (req) => {
         const { txnRef, status, fromDate, toDate } = req.query;
