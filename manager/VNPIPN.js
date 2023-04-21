@@ -7,6 +7,8 @@ const { sortObject } = require("../utils/payment");
 const querystring = require("qs");
 const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
+const { paymentBib } = require("../email/bib");
+const Sendgrid = require('../utils/sendgrid')
 
 module.exports = {
     getIpn: async (req) => {
@@ -40,6 +42,13 @@ module.exports = {
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
+        const msg = {
+            to: "mailinhchi22082002@gmail.com", // Change to your recipient
+            from: 'admin@onewaymarathon.com', // Change to your verified sender
+            subject: 'Xác nhận đăng ký thành công Oneway Oneway marathon 2023',
+            html: paymentBib(paymentedModel),
+        }
+        await Sendgrid.send(msg);
         return { message: "Confirm Success", RspCode: '00' };
     },
     get: (req) => {
