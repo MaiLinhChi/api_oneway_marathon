@@ -21,11 +21,11 @@ module.exports = {
         if (!paymentedModel) {
             return { message: "Order not found", RspCode: '01' };
         }
-        if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
-            return { message: "Invalid amount", RspCode: '04' };
-        }
         if (paymentedModel.status === "comfirmed") {
             return { message: "Order already confirmed", RspCode: '02' };
+        }
+        if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
+            return { message: "Invalid amount", RspCode: '04' };
         }
         if (req.query.vnp_SecureHash !== signed) {
             return { message: "Invalid signature", RspCode: '97' };
