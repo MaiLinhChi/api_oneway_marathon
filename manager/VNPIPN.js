@@ -43,12 +43,15 @@ module.exports = {
             return { message: "Unknow error", RspCode: '99' };
         }
         const msg = {
-            to: "mailinhchi22082002@gmail.com", // Change to your recipient
+            to: paymentedModel.email, // Change to your recipient
             from: 'admin@onewaymarathon.com', // Change to your verified sender
-            subject: 'Xác nhận đăng ký thành công Oneway Oneway marathon 2023',
+            subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
             html: paymentBib(paymentedModel),
         }
-        await Sendgrid.send(msg);
+        const result = await Sendgrid.send(msg);
+        if(result[0].statusCode === 202) {
+            await paymentedModel.updateOne({ sendMailOrder: true });
+        } 
         return { message: "Confirm Success", RspCode: '00' };
     },
     get: (req) => {
