@@ -13,7 +13,7 @@ module.exports = {
                     Bạn đã đăng ký tham gia thành công Giải <b>${order.marathon}</b>. <br />
                     Để xem và nhận được số BIB của bạn, mời bạn nhấn vào nút bên dưới để tiến hành quay và nhận số BIB.
                 </p>
-                <a href="" style="transform: skew(-12deg); background: #1964FF; width: 196px; height: 56px; color: #FFF9E7; text-decoration: none; position: relative; display: block; margin: 0 auto;">
+                <a href=${process.env.URL_CLIENT} style="transform: skew(-12deg); background: #1964FF; width: 196px; height: 56px; color: #FFF9E7; text-decoration: none; position: relative; display: block; margin: 0 auto;">
                     <span style="text-align: center;">Quay BIB ngay</span>
                 </a>
                 <p style="text-align: center;">Hoặc ấn vào đây/sao chép đường dẫn này https://onewaymarathon.com/resetpassword?key=72aa06fc194acaefe808a00cb8576007 và dán lên trình duyệt của bạn để quay BIB.</p>

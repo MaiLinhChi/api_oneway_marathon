@@ -95,7 +95,7 @@ const vnpayPaymentMethod = (env, method, amount, code, ip) => {
         vnp_Locale: 'vn',
         vnp_OrderInfo: "Thanh toan hoa don " + code + " so tien: " + amount,
         vnp_OrderType: 'other',
-        vnp_ReturnUrl: "http://localhost:3000/payment-result/" + code,
+        vnp_ReturnUrl: `${process.env.URL_CLIENT}/payment-result/` + code,
         vnp_TxnRef: code + '_' + moment().format('DDHHmmss'),
         vnp_BankCode: method
     }
