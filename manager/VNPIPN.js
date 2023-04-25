@@ -21,7 +21,7 @@ module.exports = {
         const signData = querystring.stringify(query, { encode: false });
         const hmac = crypto.createHmac("sha512", secretKey);
         const signed = hmac.update(signData, "utf-8").digest("hex");
-        const paymentedModel = await BibModel.findOne({ txnRef: "644741b0d5f09e1c30a8685b_25095822" });
+        const paymentedModel = await BibModel.findOne({ txnRef: req.query.vnp_TxnRef });
         if (!paymentedModel) {
             return { message: "Order not found", RspCode: '01' };
         }
