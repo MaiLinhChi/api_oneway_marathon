@@ -1,6 +1,5 @@
 module.exports = {
     paymentBib: (order, url) => {
-        console.log(order);
         return (
             `
             <!DOCTYPE html>
@@ -41,10 +40,10 @@ module.exports = {
                             Bạn đã đăng ký tham gia thành công Giải <b>${order.marathon}</b>. <br />
                             Để xem và nhận được số BIB của bạn, mời bạn nhấn vào nút bên dưới để tiến hành quay và nhận số BIB.
                         </p>
-                        <a href=${url} class="btn-bib">
+                        <a href=${url}/bib/${order._id} class="btn-bib">
                             <div style="text-align: center; width: 100%; color: white; line-height: 40px;">Quay BIB ngay</div>
                         </a>
-                        <p style="text-align: center;">Hoặc ấn vào đây/sao chép đường dẫn này https://onewaymarathon.com/resetpassword?key=72aa06fc194acaefe808a00cb8576007 và dán lên trình duyệt của bạn để quay BIB.</p>
+                        <p style="text-align: center;">Hoặc ấn vào đây/sao chép đường dẫn này <a href=${url}/bib/${order._id}>${url}/bib/${order._id}</a> và dán lên trình duyệt của bạn để quay BIB.</p>
                         <h1>Thông tin của bạn</h1>
                         <table style="width: 100%;">
                             <tr>
