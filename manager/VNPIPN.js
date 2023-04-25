@@ -41,7 +41,7 @@ module.exports = {
         });
         const registerId = mUUID4.toString(paymentBib._id);
         const ipn = await model.save();
-        const bib = await paymentedModel.updateOne({ status: "comfirmed", registerId });
+        const bib = await paymentedModel.updateOne({ status: "comfirmed", registerId }, {new: true});
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
