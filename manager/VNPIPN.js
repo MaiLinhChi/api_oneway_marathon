@@ -46,7 +46,6 @@ module.exports = {
         } while (isExitRegisterId);
         const ipn = await model.save();
         const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
-        console.log(bib);
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
