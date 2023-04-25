@@ -49,7 +49,7 @@ module.exports = {
             to: paymentedModel.email, // Change to your recipient
             from: 'admin@onewaymarathon.com', // Change to your verified sender
             subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
-            html: paymentBib(paymentedModel, process.env.URL_CLIENT),
+            html: paymentBib(bib, process.env.URL_CLIENT),
         }
         const result = await Sendgrid.send(msg);
         if(result[0].statusCode === 202) {
