@@ -24,7 +24,7 @@ module.exports = {
         if (!paymentedModel) {
             return { message: "Order not found", RspCode: '01' };
         }
-        if (paymentedModel.status === "comfirmed") {
+        if (paymentedModel.status === "confirmed") {
             return { message: "Order already confirmed", RspCode: '02' };
         }
         if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
@@ -45,7 +45,8 @@ module.exports = {
             isExitRegisterId = await BibModel.findOne({registerId});
         } while (isExitRegisterId);
         const ipn = await model.save();
-        const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "comfirmed", registerId });
+        const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
+        console.log(bib);
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
