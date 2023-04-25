@@ -1,5 +1,6 @@
 module.exports = {
     paymentBib: (order, url) => {
+        console.log(order);
         return (
             `
             <!DOCTYPE html>

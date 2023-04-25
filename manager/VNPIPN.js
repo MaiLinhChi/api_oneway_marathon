@@ -9,8 +9,7 @@ const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
 const { paymentBib } = require("../email/bib");
 const Sendgrid = require('../utils/sendgrid');
-const MUUID = require('uuid-mongodb');
-const mUUID4 = MUUID.v4();
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
     getIpn: async (req) => {
@@ -25,7 +24,7 @@ module.exports = {
         if (!paymentedModel) {
             return { message: "Order not found", RspCode: '01' };
         }
-        if (paymentedModel.status === "comfirmed") {
+        if (paymentedModel.status === "confirmed") {
             return { message: "Order already confirmed", RspCode: '02' };
         }
         if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
@@ -39,9 +38,15 @@ module.exports = {
             status: req.query.vnp_TransactionStatus == "00" ? "success" : "error",
             data: req.query,
         });
-        const registerId = mUUID4.toString(paymentBib._id);
+        let isExitRegisterId;
+        let registerId;
+        do {
+            registerId = uuidv4();
+            isExitRegisterId = await BibModel.findOne({registerId});
+        } while (isExitRegisterId);
         const ipn = await model.save();
-        const bib = await paymentedModel.updateOne({ status: "comfirmed", registerId }, {new: true});
+        const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
+        console.log(bib);
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
