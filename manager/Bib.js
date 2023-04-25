@@ -7,12 +7,6 @@ const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: async (req) => {
-        const msg = {
-            to: req.payload.email, // Change to your recipient
-            from: 'admin@onewaymarathon.com', // Change to your verified sender
-            subject: 'One Way register verify',
-            text: 'Your code to verify One Way account: ',
-        }
         if(req.payload.bankCode) {
             const comfirmed = await Model.findOne({_id: req.params.id});
             if(comfirmed.status === "comfirmed") {
