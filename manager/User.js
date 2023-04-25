@@ -74,7 +74,6 @@ module.exports = {
         const remainWaiting = moment.utc().unix() - user.timeResendVerifyEmail
         if(remainWaiting < 120) return {statusCode: 400, message: 'Please wait in ' + remainWaiting + ' s'};
         return sendCodeResetPass(req, user)
-
     },
     getById: (req) => {
         return Model.findOne({UserName: req.params.id}).then(item => {

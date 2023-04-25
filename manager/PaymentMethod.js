@@ -2,7 +2,6 @@
 "use strict";
 
 const Model = require('../model/PaymentMethod')
-const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
 

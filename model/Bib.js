@@ -26,6 +26,7 @@ const schema = new Schema({
  shirtSize: String,
  nameBib: String,
  timeEstimation: String,
+ registerId: { type:String, required: true },
  sendMailOrder: {type: Boolean, default: false},
  sendMailRollBib: {type: Boolean, default: false},
  status: {type: String, default: 'pending'},

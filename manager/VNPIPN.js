@@ -8,7 +8,9 @@ const querystring = require("qs");
 const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
 const { paymentBib } = require("../email/bib");
-const Sendgrid = require('../utils/sendgrid')
+const Sendgrid = require('../utils/sendgrid');
+const MUUID = require('uuid-mongodb');
+const mUUID4 = MUUID.v4();
 
 module.exports = {
     getIpn: async (req) => {
@@ -19,7 +21,7 @@ module.exports = {
         const signData = querystring.stringify(query, { encode: false });
         const hmac = crypto.createHmac("sha512", secretKey);
         const signed = hmac.update(signData, "utf-8").digest("hex");
-        const paymentedModel = await BibModel.findOne({ txnRef: req.query.vnp_TxnRef });
+        const paymentedModel = await BibModel.findOne({ txnRef: "644741b0d5f09e1c30a8685b_25095822" });
         if (!paymentedModel) {
             return { message: "Order not found", RspCode: '01' };
         }
@@ -37,8 +39,9 @@ module.exports = {
             status: req.query.vnp_TransactionStatus == "00" ? "success" : "error",
             data: req.query,
         });
+        const registerId = mUUID4.toString(paymentBib._id);
         const ipn = await model.save();
-        const bib = await paymentedModel.updateOne({ status: "comfirmed" });
+        const bib = await paymentedModel.updateOne({ status: "comfirmed", registerId });
         if (!bib || !ipn) {
             return { message: "Unknow error", RspCode: '99' };
         }
@@ -46,7 +49,7 @@ module.exports = {
             to: paymentedModel.email, // Change to your recipient
             from: 'admin@onewaymarathon.com', // Change to your verified sender
             subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
-            html: paymentBib(paymentedModel),
+            html: paymentBib(paymentedModel, process.env.URL_CLIENT),
         }
         const result = await Sendgrid.send(msg);
         if(result[0].statusCode === 202) {
