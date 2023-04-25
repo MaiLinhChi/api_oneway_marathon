@@ -2,11 +2,8 @@
 "use strict";
 
 const Model = require('../model/Bib')
-const MUUID = require('uuid-mongodb')
 const moment = require("moment");
-const mUUID4 = MUUID.v4();
 const {vnpayPaymentMethod} = require("../utils/payment");
-const Sendgrid = require('../utils/sendgrid')
 
 module.exports = {
     putById: async (req) => {
