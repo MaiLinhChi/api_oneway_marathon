@@ -33,21 +33,23 @@ module.exports = {
         if (req.query.vnp_SecureHash !== signed) {
             return { message: "Invalid signature", RspCode: '97' };
         }
+
         const model = new IpnModel({
             txnRef: req.query.vnp_TxnRef,
             status: req.query.vnp_TransactionStatus == "00" ? "success" : "error",
             data: req.query,
         });
+        await model.save();
+
         let isExitRegisterId;
         let registerId;
         do {
             registerId = uuidv4();
             isExitRegisterId = await BibModel.findOne({registerId});
         } while (isExitRegisterId);
-        const ipn = await model.save();
-        const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
-        if (!bib || !ipn) {
-            return { message: "Unknow error", RspCode: '99' };
+        
+        if(req.query.vnp_TransactionStatus === '00') {
+            await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId });
         }
         const msg = {
             to: paymentedModel.email, // Change to your recipient
