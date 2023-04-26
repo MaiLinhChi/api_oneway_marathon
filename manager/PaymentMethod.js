@@ -18,7 +18,19 @@ module.exports = {
         }
     },
     putById: (req) => {
-        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
+        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+            if(item) {
+                return {
+                    data: item,
+                    message: "Edit payment method successfully",
+                    status: 200
+                }
+            }
+            return {
+                message: "Edit payment method unsuccessfully",
+                status: 400
+            }
+        })
     },
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(item => {
