@@ -8,6 +8,7 @@ const schema = new Schema({
  email: String,
  marathon: String,
  price: Number,
+ bib: Number,
  distance: Number,
  imageEmail: String, 
  fullName: String,

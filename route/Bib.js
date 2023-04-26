@@ -25,6 +25,7 @@ module.exports = {
                 bankCode: Joi.string().optional(),
                 price: Joi.number().optional(),
                 status: Joi.string().valid('pending', 'processing', 'comfirmed').optional(),
+                bib: Joi.number().optional(),
             })
         }
     },
