@@ -49,17 +49,17 @@ module.exports = {
         } while (isExitRegisterId);
 
         if(req.query.vnp_TransactionStatus === '00') {
-            await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId });
-        }
-        const msg = {
-            to: paymentedModel.email, // Change to your recipient
-            from: 'admin@onewaymarathon.com', // Change to your verified sender
-            subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
-            html: paymentBib(bib, process.env.URL_CLIENT),
-        }
-        const result = await Sendgrid.send(msg);
-        if(result[0].statusCode === 202) {
-            await paymentedModel.updateOne({ sendMailOrder: true });
+            const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
+            const msg = {
+                to: paymentedModel.email, // Change to your recipient
+                from: 'admin@onewaymarathon.com', // Change to your verified sender
+                subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
+                html: paymentBib(bib, process.env.URL_CLIENT),
+            }
+            const result = await Sendgrid.send(msg);
+            if(result[0].statusCode === 202) {
+                await paymentedModel.updateOne({ sendMailOrder: true });
+            }
         }
         return { message: "Confirm Success", RspCode: '00' };
     },
