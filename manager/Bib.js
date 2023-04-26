@@ -26,7 +26,26 @@ module.exports = {
                 }
             })
         }
-        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true})
+        if(req.payload.bib) {
+            const order = await Model.findOne({_id: req.params.id});
+            if(order.status !== "confirmed") return {status: 400, message: "Please confirmed order"};
+            const isExitBib = await Model.findOne({bib: req.payload.bib});
+            if(isExitBib) return {status: 400, message: "Bib was exit"};
+            return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+                return {
+                    data: item,
+                    status: 200,
+                    message: "Confinmed bib successfully"
+                }
+            })
+        }
+        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+            return {
+                data: item,
+                status: 200,
+                message: "Add order successfully"
+            }
+        })
     },
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(item => {
