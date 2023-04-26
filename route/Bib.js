@@ -24,8 +24,8 @@ module.exports = {
                 gateway: Joi.string().optional(),
                 bankCode: Joi.string().optional(),
                 price: Joi.number().optional(),
-                status: Joi.string().valid('pending', 'processing', 'comfirmed').optional(),
-                bib: Joi.number().optional(),
+                status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
+                bib: Joi.string().optional(),
             })
         }
     },
@@ -64,7 +64,7 @@ module.exports = {
                 keyword: Joi.string().optional(),
                 email: Joi.string().optional(),
                 marathon: Joi.string().optional(),
-                status: Joi.string().valid('pending', 'processing', 'comfirmed').optional(),
+                status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
                 price: Joi.string().optional(),
                 fromDate: Joi.string().optional(),
                 toDate: Joi.string().optional(),
