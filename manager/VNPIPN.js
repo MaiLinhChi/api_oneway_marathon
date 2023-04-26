@@ -47,7 +47,7 @@ module.exports = {
             registerId = uuidv4();
             isExitRegisterId = await BibModel.findOne({registerId});
         } while (isExitRegisterId);
-        
+
         if(req.query.vnp_TransactionStatus === '00') {
             await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId });
         }
@@ -60,7 +60,7 @@ module.exports = {
         const result = await Sendgrid.send(msg);
         if(result[0].statusCode === 202) {
             await paymentedModel.updateOne({ sendMailOrder: true });
-        } 
+        }
         return { message: "Confirm Success", RspCode: '00' };
     },
     get: (req) => {
