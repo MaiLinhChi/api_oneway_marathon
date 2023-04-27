@@ -21,19 +21,12 @@ module.exports = {
         const { id } = req.params;
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `No brand with id: ${id}`, status: 404};
-            const ins = await Model.findByIdAndDelete({_id: id});
-            if(!ins) return {message: `No brand with id: ${id}`, status: 404, data: ins};
             const item = await Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true});
-            if(item) {
-                return {
-                    data: item,
-                    message: "Edit payment method successfully",
-                    status: 200
-                }
-            }
+            if(!item) return {message: `No brand with id: ${id}`, status: 404, data: ins};
             return {
-                message: "Edit payment method unsuccessfully",
-                status: 400
+                data: item,
+                message: "Edit payment method successfully",
+                status: 200
             }
         } catch (error) {
             return {
