@@ -25,14 +25,14 @@ module.exports = {
             if (!paymentedModel) {
                 return { Message: "Order not found", RspCode: '01' };
             }
-            if (paymentedModel.status === "confirmed") {
-                return { Message: "Order already confirmed", RspCode: '02' };
-            }
             if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
                 return { Message: "Invalid amount", RspCode: '04' };
             }
             if (req.query.vnp_SecureHash !== signed) {
                 return { Message: "Invalid signature", RspCode: '97' };
+            }
+            if (paymentedModel.status === "confirmed") {
+                return { Message: "Order already confirmed", RspCode: '02' };
             }
 
             const model = new IpnModel({
