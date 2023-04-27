@@ -47,7 +47,7 @@ module.exports = [
   { method: "POST", path: "/marathons", config: Marathon.post },
   { method: "GET", path: "/marathons", config: Marathon.get },
   { method: "GET", path: "/marathon/{id}", config: Marathon.getById },
-  { method: "PUT", path: "/marathons/{id}", config: Marathon.putById },
+  { method: "PUT", path: "/marathon/{id}", config: Marathon.putById },
 
   { method: "POST", path: "/bib", config: Bib.post },
   { method: "GET", path: "/bib", config: Bib.get },
