@@ -45,8 +45,8 @@ module.exports = {
                 fee: Joi.number().optional(),
                 name: Joi.string().optional(),
                 feePercent: Joi.number().optional(),
-                isDefault: Joi.boolean().default(false).optional(),
-                status: Joi.string().default('pending').optional(),
+                isDefault: Joi.boolean().optional(),
+                status: Joi.string().valid("pending", "active", "inactive").optional(),
             })
         }
     },

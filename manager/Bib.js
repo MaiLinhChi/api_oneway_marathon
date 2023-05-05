@@ -49,9 +49,15 @@ module.exports = {
     },
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(item => {
+            if(item) {
+                return {
+                    data: item,
+                    status: 200
+                }
+            }
             return {
-                data: item,
-                status: 200
+                message: "Not bib with id " + req.params.id,
+                status: 400
             }
         })
     },
