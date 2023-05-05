@@ -1,0 +1,117 @@
+const Joi = require("joi");
+const Manager = require("../manager/Group");
+const Response = require("./response").setup(Manager);
+
+module.exports = {
+  putById: {
+    tags: ['api', 'Group'],
+    description: 'Update group By id',
+    handler: (req, res) => {
+        return Response(req, res, 'putById');
+    },
+    auth: {
+        strategy: 'jwt',
+    },
+    validate: {
+        headers: Joi.object({
+            authorization: Joi.string().required()
+        }).options({allowUnknown: true}),
+        params: Joi.object({
+            id: Joi.string().required(),
+        }),
+        payload: Joi.object({
+            fullName: Joi.string().optional(),
+            nameGroup: Joi.string().optional(),
+            email: Joi.string().optional(),
+            phone: Joi.string().optional(),
+            membership:  Joi.array().min(1).items(Joi.object({
+              userId: Joi.string().required(),
+              fullName: Joi.string().required(),
+            })).optional()
+        })
+    }
+  },
+  getById: {
+    tags: ['api', 'Group'],
+    description: 'get group by id',
+    handler: (req, res) => {
+        return Response(req, res, 'getById')
+    },
+    auth: {
+        strategy: 'jwt',
+    },
+    validate: {
+        headers: Joi.object({
+            authorization: Joi.string().required()
+        }).options({allowUnknown: true}),
+        params: Joi.object({
+            id: Joi.string().required()
+        }),
+    }
+  },
+  get: {
+    tags: ["api", "Group"],
+    description: "Get list Groups",
+    handler: (req, res) => {
+      return Response(req, res, "get");
+    },
+    // auth: {
+    //     strategy: 'jwt'
+    // },
+    validate: {
+      // headers: Joi.object({
+      //     authorization: Joi.string().required()
+      // }).options({allowUnknown: true}),
+      query: Joi.object({
+        fullName: Joi.string(),
+        nameGroup: Joi.string(),
+        email: Joi.string(),
+        phone: Joi.string(),
+        fromDate: Joi.string().optional(),
+        toDate: Joi.string().optional(),
+        limit: Joi.number().default(20),
+        skip: Joi.number().default(0),
+        sort: Joi.number().valid("desc", "asc"),
+      }),
+    },
+  },
+  post: {
+    tags: ['api', 'Group'],
+    description: 'Create group',
+    handler: (req, res) => {
+        return Response(req, res, 'post');
+    },
+    auth: {
+        strategy: 'jwt',
+    },
+    validate: {
+        payload: Joi.object({
+            fullName: Joi.string().required(),
+            nameGroup: Joi.string().required(),
+            email: Joi.string().required(),
+            phone: Joi.string().required(),
+            userId: Joi.string().required(),
+            password: Joi.string().required(),
+            membership: Joi.array().min(1).items(Joi.object({
+              userId: Joi.string().required(),
+              fullName: Joi.string().required(),
+            }))
+        }),
+        headers: Joi.object({
+            authorization: Joi.string().required()
+        }).options({allowUnknown: true}),
+    }
+  },
+  deleteById: {
+    tags: ["api", "Group"],
+    description: "Delete group by id",
+    handler: (req, res) => {
+      return Response(req, res, "deleteById");
+    },
+    validate: {
+      params: Joi.object({
+        id: Joi.string().required(),
+      }),
+    },
+  },
+};

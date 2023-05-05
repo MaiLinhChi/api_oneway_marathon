@@ -24,10 +24,11 @@ module.exports = {
             payload: Joi.object({
                 name: Joi.string().optional(),
                 image: Joi.string().optional(),
+                imageEmail: Joi.string().optional(),
                 location: Joi.string().optional(),
                 type: Joi.string().default('Road/City trail').optional(),
                 description: Joi.string().optional(),
-                status: Joi.string().valid('active', 'deactive').optional(),
+                status: Joi.string().valid('active', 'inactive').optional(),
                 startTime: Joi.string().optional(),
                 race: Joi.array().min(1).items(Joi.object({
                     image: Joi.string().optional(),
@@ -40,6 +41,7 @@ module.exports = {
                     price: Joi.array().min(1).items(Joi.object({
                         name: Joi.string().required(),
                         startSell: Joi.string().required(),
+                        endSell: Joi.string().required(),
                         individual: Joi.number().min(1000).required().description('price tiket on vnd'),
                         group: Joi.number().min(1000).required().description('award on vnd'),
                         _id: Joi.string().optional(),
@@ -136,6 +138,7 @@ module.exports = {
             payload: Joi.object({
                 name: Joi.string().required(),
                 image: Joi.string().required(),
+                imageEmail: Joi.string().required(),
                 description: Joi.string().required(),
                 startTime: Joi.string().required(),
                 location: Joi.string().required(),
@@ -151,6 +154,7 @@ module.exports = {
                     price: Joi.array().min(1).items(Joi.object({
                         name: Joi.string().required(),
                         startSell: Joi.string().required(),
+                        endSell: Joi.string().required(),
                         individual: Joi.number().min(1000).required().description('price tiket on vnd'),
                         group: Joi.number().min(1000).required().description('award on vnd'),
                     })).optional()
@@ -160,7 +164,7 @@ module.exports = {
                         from: Joi.number(),
                         to: Joi.number(),
                     }),
-                    startSell: Joi.string().required(),
+                    percent: Joi.string().required(),
                 })),
                 raceKit: Joi.array().min(1).max(4).items(Joi.object({
                     image: Joi.string().required(),

@@ -24,6 +24,7 @@ const schema = new Schema({
         price: [{
             name: String,
             startSell: String,
+            endSell: String,
             individual: Number,
             group: Number, // vnd
         }]
