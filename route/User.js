@@ -80,8 +80,8 @@ module.exports = {
                 username: Joi.string().min(8),
                 password: Joi.string().min(8).required(),
                 fullname: Joi.string(),
-                // mobile: Joi.string(),
-                // avatar: Joi.string(),
+                mobile: Joi.string().required(),
+                avatar: Joi.string().optional(),
             })
         }
     },
