@@ -8,6 +8,7 @@ const Marathon = require("../route/Marathon");
 const Bib = require("../route/Bib");
 const PaymentMethod = require("../route/PaymentMethod");
 const Ipn = require("../route/Ipn");
+const Group = require("../route/Group");
 
 module.exports = [
   {
@@ -85,4 +86,9 @@ module.exports = [
     path: "/ipn/{id}",
     config: Ipn.deleteById,
   },
+
+  { method: "POST", path: "/group", config: Group.post },
+  { method: "GET", path: "/group", config: Group.get },
+  { method: "GET", path: "/group/{id}", config: Group.getById },
+  { method: "DELETE", path: "/group/{id}", config: Group.deleteById },
 ];
