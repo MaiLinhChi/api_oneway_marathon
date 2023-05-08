@@ -10,6 +10,7 @@ const schema = new Schema({
  groupName: String,
  password: String,
  fullName: String,
+ status: {type: String, default: 'pending'},
  email: String,
  phone: String,
  role: String,
