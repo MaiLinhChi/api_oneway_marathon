@@ -88,7 +88,7 @@ module.exports = [
   },
 
   { method: "POST", path: "/group", config: Group.post },
-  { method: "GET", path: "/group", config: Group.get },
+  { method: "GET", path: "/groups", config: Group.get },
   { method: "GET", path: "/group/{id}", config: Group.getById },
   { method: "DELETE", path: "/group/{id}", config: Group.deleteById },
 ];
