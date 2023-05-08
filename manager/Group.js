@@ -17,22 +17,28 @@ module.exports = {
         })
     },
     get:  (req) => {
-        const {keyword, fullName, nameGroup, email, phone, fromDate, toDate, pageSize, pageIndex} = req.query
+        const {keyword, groupId, marathonId, groupName, fullName, email, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = {}
         const keywordCondition = keyword ? { $or:[
+            { groupId: { $regex: keyword, $options: 'i'} },  
+            { marathonId: { $regex: keyword, $options: 'i'} },  
             { fullName: { $regex: keyword, $options: 'i'} },
-            { nameGroup: { $regex: keyword, $options: 'i'} },
+            { groupName: { $regex: keyword, $options: 'i'} },
             { email: { $regex: keyword, $options: 'i'} },
-            { phone: { $regex: keyword, $options: 'i'} },  
+            { phone: { $regex: keyword, $options: 'i'} },
+            { role: { $regex: keyword, $options: 'i'} },  
         ]} : {} 
         const skip =  pageIndex - 1 || 0
         const limit = pageSize || 20
         const sort = req.query.sort || 'asc'
 
-        if(fullName) options.fullName = { $regex: new RegExp(req.query.Name), $options: 'i' }
-        if(nameGroup) options.nameGroup = nameGroup
+        if(groupId) options.groupId = groupId
+        if(marathonId) options.marathonId = marathonId
+        if(groupName) options.groupName = groupName
+        if(fullName) options.fullName = { $regex: new RegExp(req.query.fullName), $options: 'i' }
         if(phone) options.phone = phone
         if(email) options.email = email
+        if(role) options.role = role
         // if(fromDate && toDate) options.CreatedOn = {$gte: new Date(fromDate), $lte: new Date(toDate)}
         if(fromDate || toDate) options.CreatedOn = {}
         if(fromDate) options.CreatedOn.$gte =  new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY"))

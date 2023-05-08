@@ -5,17 +5,14 @@ const Schema    = mongoose.Schema;
 const moment = require('moment')
 
 const schema = new Schema({
+ groupId: String,
  marathonId: String,
- nameGroup: String,
+ groupName: String,
  password: String,
- userId: String,
  fullName: String,
  email: String,
  phone: String,
- membership: [{
-    userId: String,
-    fullName: String,
- }],
+ role: String,
  updatedAt: String,
  updatedBy: String,
  createdAt: String,
