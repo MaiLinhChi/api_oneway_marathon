@@ -67,6 +67,13 @@ module.exports = {
             return { Message: "Unknow error", RspCode: '99' };
         }
     },
+    getById: (req) => {
+        return IpnModel.findOne({_id: req.params.id}).then(item => {
+            return {
+                item
+            }
+        })
+    },
     get: (req) => {
         const { txnRef, status, fromDate, toDate } = req.query;
         const options = {};

@@ -80,7 +80,7 @@ module.exports = [
   },
 
   { method: "GET", path: "/ipns", config: Ipn.get },
-
+  { method: "GET", path: "/ipn/{id}", config: Ipn.getById },
   {
     method: "DELETE",
     path: "/ipn/{id}",

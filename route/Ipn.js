@@ -3,6 +3,25 @@ const Manager = require("../manager/VNPIPN");
 const Response = require("./response").setup(Manager);
 
 module.exports = {
+  getById: {
+    tags: ['api', 'Ipn'],
+    description: 'get ipn by id',
+    handler: (req, res) => {
+        return Response(req, res, 'getById')
+    },
+    auth: {
+        strategy: 'jwt',
+        scope: ['admin']
+    },
+    validate: {
+        headers: Joi.object({
+            authorization: Joi.string().required()
+        }).options({allowUnknown: true}),
+        params: Joi.object({
+            id: Joi.string().required()
+        }),
+    }
+  },
   getIpn: {
     tags: ["api", "Ipn"],
     description: "get ipn",
@@ -16,13 +35,14 @@ module.exports = {
     handler: (req, res) => {
       return Response(req, res, "get");
     },
-    // auth: {
-    //     strategy: 'jwt'
-    // },
+    auth: {
+        strategy: 'jwt',
+        scope: ['admin']
+    },
     validate: {
-      // headers: Joi.object({
-      //     authorization: Joi.string().required()
-      // }).options({allowUnknown: true}),
+      headers: Joi.object({
+          authorization: Joi.string().required()
+      }).options({allowUnknown: true}),
       query: Joi.object({
         txnRef: Joi.string(),
         status: Joi.string().valid("active", "deactive"),
@@ -35,15 +55,22 @@ module.exports = {
     },
   },
   deleteById: {
-    tags: ["api", "Ipn"],
-    description: "Delete Ipn by id",
+    tags: ['api', 'Ipn'],
+    description: 'Delete ipn by id',
     handler: (req, res) => {
-      return Response(req, res, "deleteById");
+        return Response(req, res, 'deleteById')
+    },
+    auth: {
+        strategy: 'jwt',
+        scope: ['admin']
     },
     validate: {
-      params: Joi.object({
-        id: Joi.string().required(),
-      }),
-    },
-  },
+        headers: Joi.object({
+            authorization: Joi.string().required()
+        }).options({allowUnknown: true}),
+        params: Joi.object({
+            id: Joi.string().required()
+        }),
+    }
+},
 };
