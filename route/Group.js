@@ -89,12 +89,13 @@ module.exports = {
     },
     validate: {
         payload: Joi.object({
+            marathonId: Joi.string().required(),
+            groupName: Joi.string().required(),
+            password: Joi.string().required(),
             fullName: Joi.string().required(),
-            nameGroup: Joi.string().required(),
             email: Joi.string().required(),
             phone: Joi.string().required(),
-            userId: Joi.string().required(),
-            password: Joi.string().required(),
+            role: Joi.string().required(),
         }),
         headers: Joi.object({
             authorization: Joi.string().required()
