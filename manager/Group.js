@@ -48,7 +48,7 @@ module.exports = {
         
         return Model.find({$and: [options, keywordCondition]}).limit(limit).skip(skip * limit).sort({
             CreatedOn: sort
-        }).then(async rs => {
+        }).lean().then(async rs => {
             const totalRecord = await Model.countDocuments({$and: [options, keywordCondition]})
             const newRes = rs.map(r=>{
                 return {
