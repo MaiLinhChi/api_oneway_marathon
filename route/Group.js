@@ -20,14 +20,14 @@ module.exports = {
             id: Joi.string().required(),
         }),
         payload: Joi.object({
+            groupId: Joi.string().optional(),
+            marathonId: Joi.string().optional(),
+            groupName: Joi.string().optional(),
+            password: Joi.string().optional(),
             fullName: Joi.string().optional(),
-            nameGroup: Joi.string().optional(),
             email: Joi.string().optional(),
             phone: Joi.string().optional(),
-            membership:  Joi.array().min(1).items(Joi.object({
-              userId: Joi.string().required(),
-              fullName: Joi.string().required(),
-            })).optional()
+            role: Joi.string().optional(),
         })
     }
   },
@@ -63,10 +63,13 @@ module.exports = {
       //     authorization: Joi.string().required()
       // }).options({allowUnknown: true}),
       query: Joi.object({
-        fullName: Joi.string(),
-        nameGroup: Joi.string(),
-        email: Joi.string(),
-        phone: Joi.string(),
+        groupId: Joi.string().optional(),
+        marathonId: Joi.string().optional(),
+        groupName: Joi.string().optional(),
+        fullName: Joi.string().optional(),
+        email: Joi.string().optional(),
+        phone: Joi.string().optional(),
+        role: Joi.string().optional(),
         fromDate: Joi.string().optional(),
         toDate: Joi.string().optional(),
         limit: Joi.number().default(20),
@@ -92,10 +95,6 @@ module.exports = {
             phone: Joi.string().required(),
             userId: Joi.string().required(),
             password: Joi.string().required(),
-            membership: Joi.array().min(1).items(Joi.object({
-              userId: Joi.string().required(),
-              fullName: Joi.string().required(),
-            }))
         }),
         headers: Joi.object({
             authorization: Joi.string().required()
