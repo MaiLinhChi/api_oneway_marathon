@@ -28,6 +28,7 @@ module.exports = {
             email: Joi.string().optional(),
             phone: Joi.string().optional(),
             role: Joi.string().optional(),
+            status: Joi.string().optional(),
         })
     }
   },
@@ -70,6 +71,7 @@ module.exports = {
         email: Joi.string().optional(),
         phone: Joi.string().optional(),
         role: Joi.string().optional(),
+        status: Joi.string().optional(),
         fromDate: Joi.string().optional(),
         toDate: Joi.string().optional(),
         limit: Joi.number().default(20),
