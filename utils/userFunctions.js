@@ -55,12 +55,12 @@ const verifyCredentials = (req, res) => {
                     if (isValid) {
                         resolve({user: {...user._doc}});
                     } else {
-                        resolve({statusCode: 400, message: 'Invalid credentials!', message_code: 'invalid_credentials'})
+                        resolve({statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'})
                     }
                 });
             })
         }
-        return res.response({statusCode: 400, message: 'Invalid credentials!', message_code: 'invalid_credentials'})
+        return res.response({statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'})
     }).catch(e => {
         console.log(e.toString())
         return res.response({statusCode: 400, message: e.toString()})
