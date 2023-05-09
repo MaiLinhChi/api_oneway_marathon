@@ -9,11 +9,24 @@ const schema = new Schema({
  marathonId: String,
  groupName: String,
  password: String,
- fullName: String,
  status: {type: String, default: 'pending'},
- email: String,
- phone: String,
- role: String,
+ membership: [
+   {
+      userId: {
+         type: String,
+         default: null
+      },
+      role: {
+         type: String,
+         enum: ['captain', 'vice', 'member'],
+         default: 'member'
+      },
+      email: String,
+      phone: String,
+      fullName: String,
+      timeJoined: String
+   }
+ ],
  updatedAt: String,
  updatedBy: String,
  createdAt: String,
