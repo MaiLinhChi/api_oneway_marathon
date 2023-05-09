@@ -3,10 +3,12 @@
 const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
+const COLLECTION_NAME = 'province'
+
 const schema = new Schema({
     _id: String,
-    Name : String,
-    Level: Number,
-});
+    name : String,
+    level: String,
+}, {collection: COLLECTION_NAME});
 
-module.exports = mongoose.model('Province', schema);
+module.exports = mongoose.model(COLLECTION_NAME, schema);

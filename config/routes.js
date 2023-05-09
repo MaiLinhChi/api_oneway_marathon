@@ -9,6 +9,9 @@ const Bib = require("../route/Bib");
 const PaymentMethod = require("../route/PaymentMethod");
 const Ipn = require("../route/Ipn");
 const Group = require("../route/Group");
+const Province = require("../route/Province")
+const District = require("../route/District")
+const Ward = require("../route/Ward")
 
 module.exports = [
   {
@@ -91,4 +94,11 @@ module.exports = [
   { method: "GET", path: "/groups", config: Group.get },
   { method: "GET", path: "/group/{id}", config: Group.getById },
   { method: "DELETE", path: "/group/{id}", config: Group.deleteById },
+
+  // Province Distric Ward
+  { method: "GET", path: "/province", config: Province.get },
+  { method: "GET", path: "/province/{id}", config: Province.getById },
+  { method: "GET", path: "/district", config: District.get },
+  { method: "GET", path: "/ward", config: Ward.get },
+  
 ];
