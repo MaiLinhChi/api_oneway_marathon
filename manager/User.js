@@ -53,13 +53,30 @@ module.exports = {
         const user = await Model.findOne({email: req.payload.email})
         if(!user) return {statusCode: 400, message: 'email is not exist !', errorCode: 'EMAIL_NOT_EXISTED'};
         if(user.verifyEmail !== req.payload.code) return {statusCode: 400, message: 'The code invalid !', errorCode: 'VERIFY_CODE_INVALID'};
-
+        // check is same old password
+        const isSame = await new Promise(resolve => {
+            bcrypt.compare(req.payload.password, user.password, (err, isValid) => {
+                if (err) resolve(false);
+                // console.log(err)
+                if (isValid) {
+                    resolve(true);
+                } else {
+                    resolve(false)
+                }
+            });
+        })
+        if (isSame) return {
+            message: 'Your new password is same old password !',
+            statusCode: 400,
+            messageKey: 'same_password'
+        }
         // update
         return new Promise(resolve => {
             hashPassword(req.payload.password, (err, hash) => {
                 if (err) {
                     resolve({statusCode: 500, message: 'server.error'})
                 }
+                console.log(user.password, '||', hash)
                 user.password = hash;
                 user.updatedBy = 'reset password';
                 user.save().then(resolve).catch(e => {
@@ -72,7 +89,7 @@ module.exports = {
         const user = await Model.findOne({email: req.payload.email})
         if(!user) return {statusCode: 400, message: 'email is not exist !'};
         const remainWaiting = moment.utc().unix() - user.timeResendVerifyEmail
-        if(remainWaiting < 120) return {statusCode: 400, message: 'Please wait in ' + remainWaiting + ' s'};
+        if(remainWaiting < 120) return {statusCode: 400, message: 'Please wait in ' + (120 -remainWaiting) + ' s'};
         return sendCodeResetPass(req, user)
     },
     getById: (req) => {
