@@ -192,7 +192,7 @@ module.exports = {
                 });
             })
         }
-            return {statusCode: 400, message: 'Invalid credential'};
+            return {statusCode: 400, message: 'Invalid credential', messageKey: 'invalid_password'};
 
     },
 }
