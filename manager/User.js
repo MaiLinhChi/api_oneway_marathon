@@ -76,7 +76,6 @@ module.exports = {
                 if (err) {
                     resolve({statusCode: 500, message: 'server.error'})
                 }
-                console.log(user.password, '||', hash)
                 user.password = hash;
                 user.updatedBy = 'reset password';
                 user.save().then(resolve).catch(e => {

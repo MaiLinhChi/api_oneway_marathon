@@ -2,14 +2,15 @@
 
 const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
-const moment = require('moment')
+
+const COLLECTION_NAME = 'ward'
 
 const schema = new Schema({
     _id: String,
-    Name : String,
-    Level: Number,
-    DistrictId: String,
-});
+    name : String,
+    level: Number,
+    districtId: String,
+}, {collection: COLLECTION_NAME});
 
-schema.index({ DistrictId: 1 });
-module.exports = mongoose.model('Ward', schema);
+// schema.index({ districtId: 1 });
+module.exports = mongoose.model(COLLECTION_NAME, schema);
