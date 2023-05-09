@@ -16,8 +16,8 @@ module.exports = {
         const skip = req.query.skip || 0
         const sort = req.query.sort || 'desc'
         const total = await Model.count();
-        if(req.query.name) options.name = { $regex: new RegExp(req.query.name) }
-        if(req.query.level) options.level = { $regex: new RegExp(req.query.level) }
+        if(req.query.name) options.name = { $regex: new RegExp(req.query.name), $options: 'i' }
+        if(req.query.level) options.level = { $regex: new RegExp(req.query.level), $options: 'i' }
         return Model.find(options).limit(total).skip(skip * total).sort({
             _id: sort
         }).then((rs) => {

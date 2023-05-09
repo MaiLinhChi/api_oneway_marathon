@@ -101,15 +101,15 @@ module.exports = {
         })
     },
     post: async (req) => {
-        const bib = await Model.find({marathon: req.payload.marathon});
-        const isHaving = bib.find((item) => item.email === req.payload.email || item.phone === req.payload.phone || item.passport === req.payload.passport);
-        if(isHaving && isHaving.email === req.payload.email) {
-            return {statusCode: 400, message: 'Email is existed !', errorCode: 'EMAIL_EXISTED'};
-        } else if(isHaving && isHaving.phone === req.payload.phone) {
-            return {statusCode: 400, message: 'Phone is existed !', errorCode: 'PHONE_EXISTED'};
-        } else if(isHaving && isHaving.passport === req.payload.passport) {
-            return {statusCode: 400, message: 'Passport is existed !', errorCode: 'PASSPORT_EXISTED'};
-        }
+        // const bib = await Model.find({marathon: req.payload.marathon});
+        // const isHaving = bib.find((item) => item.email === req.payload.email || item.phone === req.payload.phone || item.passport === req.payload.passport);
+        // if(isHaving && isHaving.email === req.payload.email) {
+        //     return {statusCode: 400, message: 'Email is existed !', errorCode: 'EMAIL_EXISTED'};
+        // } else if(isHaving && isHaving.phone === req.payload.phone) {
+        //     return {statusCode: 400, message: 'Phone is existed !', errorCode: 'PHONE_EXISTED'};
+        // } else if(isHaving && isHaving.passport === req.payload.passport) {
+        //     return {statusCode: 400, message: 'Passport is existed !', errorCode: 'PASSPORT_EXISTED'};
+        // }
         const model = new Model({
             email: req.payload.email,
             state: req.payload.state,
