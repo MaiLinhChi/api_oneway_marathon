@@ -43,6 +43,10 @@ const schema = new Schema({
         trim: true
     }
  },
+ clubId: {
+   type: String,
+   ref: 'club'
+ },
  emergencyContactName: String,
  emergencyContactPhone: String,
  shirtSize: String,

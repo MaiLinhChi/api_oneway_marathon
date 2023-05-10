@@ -8,7 +8,7 @@ const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: async (req) => {
-        const { bankCode, gateway } = req.payload
+        const { bankCode } = req.payload
         const { id } = req.params
         const bib = await Model.findOne({_id: id}).lean()
         if (!bib) return {
@@ -29,13 +29,6 @@ module.exports = {
             const url = vnpayPaymentMethod('dev', bankCode, price, id, '127.0.0.1');
             req.payload.txnRef = url.vnp_TxnRef;
             req.payload.status = "processing";
-            const paymentMethod = await PaymentMethodModel.findOne({gateway, bankCode}).lean()
-            const fee = price * paymentMethod.feePercent / 100 + paymentMethod.fee
-            req.payload.payment = {
-                gateway,
-                bankCode,
-                fee
-            }
             return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
                 return {
                     data: item,
