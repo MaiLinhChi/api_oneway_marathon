@@ -8,7 +8,7 @@ const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: async (req) => {
-        const { bankCode } = req.payload
+        const { bankCode } = req.payload.payment || {}
         const { id } = req.params
         const bib = await Model.findOne({_id: id}).lean()
         if (!bib) return {
