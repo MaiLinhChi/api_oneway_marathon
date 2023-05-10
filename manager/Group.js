@@ -105,7 +105,12 @@ module.exports = {
                     req.payload.groupCode = randomString
                     req.payload.membership = [owner]
                     const model = new Model(req.payload)
-                    model.save().then(resolve).catch(e => {
+                    model.save().then(rs => resolve({
+                        message: 'success',
+                        statusCode: 201,
+                        data: rs,
+                        messageKey: 'post_success'
+                    })).catch(e => {
                         resolve({statusCode: 400, message: e.toString()})
                     })
                 }
