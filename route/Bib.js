@@ -26,11 +26,6 @@ module.exports = {
                 price: Joi.number().optional(),
                 status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
                 bib: Joi.string().optional(),
-                vat: Joi.object({
-                    taxCode: Joi.string(),
-                    companyName: Joi.string(),
-                    companyAddress: Joi.string()
-                }).optional()
             })
         }
     },
@@ -109,6 +104,11 @@ module.exports = {
                 shirtSize: Joi.string().required(),
                 nameBib: Joi.string().optional(),
                 timeEstimation: Joi.string().required(),
+                vat: Joi.object({
+                    taxCode: Joi.string(),
+                    companyName: Joi.string(),
+                    companyAddress: Joi.string()
+                }).optional()
             }),
         }
     },
