@@ -21,9 +21,15 @@ const schema = new Schema({
          enum: ['captain', 'vice', 'member'],
          default: 'member'
       },
-      email: String,
+      email: {
+         type: String,
+         unique: true
+      },
       phone: String,
-      fullName: String,
+      fullName: {
+         type: String,
+         trim: true
+      },
       timeJoined: String
    }
  ],

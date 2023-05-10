@@ -2,23 +2,41 @@
 "use strict";
 
 const Model = require('../model/Bib')
+const PaymentMethodModel = require('../model/PaymentMethod')
 const moment = require("moment");
 const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: async (req) => {
-        if(req.payload.bankCode) {
-            const comfirmed = await Model.findOne({_id: req.params.id});
+        const { bankCode, gateway } = req.payload
+        const { id } = req.params
+        const bib = await Model.findOne({_id: id}).lean()
+        if (!bib) return {
+            message: 'bib not found',
+            status: false,
+            statusCode: 400,
+            messageKey: 'bib_not_found'
+        }
+        const { price } = bib
+        if(bankCode) {
+            const comfirmed = await Model.findOne({_id: id});
             if(comfirmed.status === "comfirmed") {
                 return {
                     message: "Order already confirmed",
                     status: 400
                 }
             }
-            const url = vnpayPaymentMethod('dev', req.payload.bankCode, req.payload.price, req.params.id, '127.0.0.1');
+            const url = vnpayPaymentMethod('dev', bankCode, price, id, '127.0.0.1');
             req.payload.txnRef = url.vnp_TxnRef;
             req.payload.status = "processing";
-            return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+            const paymentMethod = await PaymentMethodModel.findOne({gateway, bankCode}).lean()
+            const fee = price * paymentMethod.feePercent / 100 + paymentMethod.fee
+            req.payload.payment = {
+                gateway,
+                bankCode,
+                fee
+            }
+            return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
                 return {
                     data: item,
                     url,
@@ -27,11 +45,11 @@ module.exports = {
             })
         }
         if(req.payload.bib) {
-            const order = await Model.findOne({_id: req.params.id});
+            const order = await Model.findOne({_id: id});
             if(order.status !== "confirmed") return {status: 400, message: "Please confirmed order"};
             const isExitBib = await Model.findOne({bib: req.payload.bib});
             if(isExitBib) return {status: 400, message: "Bib was exit"};
-            return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+            return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
                 return {
                     data: item,
                     status: 200,
@@ -39,7 +57,7 @@ module.exports = {
                 }
             })
         }
-        return Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true}).then(item => {
+        return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
             return {
                 data: item,
                 status: 200,
@@ -100,7 +118,7 @@ module.exports = {
             }
         })
     },
-    post: async (req) => {
+    post: (req) => {
         // const bib = await Model.find({marathon: req.payload.marathon});
         // const isHaving = bib.find((item) => item.email === req.payload.email || item.phone === req.payload.phone || item.passport === req.payload.passport);
         // if(isHaving && isHaving.email === req.payload.email) {

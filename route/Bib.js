@@ -68,8 +68,8 @@ module.exports = {
                 price: Joi.string().optional(),
                 fromDate: Joi.string().optional(),
                 toDate: Joi.string().optional(),
-                limit: Joi.number().default(20),
-                skip: Joi.number().default(0),
+                pageSize: Joi.number().default(20),
+                pageIndex: Joi.number().default(1),
                 sort: Joi.number().valid('desc', 'asc')
             })
         }
@@ -79,9 +79,6 @@ module.exports = {
         description: 'Create bib',
         handler: (req, res) => {
             return Response(req, res, 'post');
-        },
-        auth: {
-            strategy: 'jwt',
         },
         validate: {
             payload: Joi.object({
@@ -96,16 +93,18 @@ module.exports = {
                 nationality: Joi.string().required(),
                 passport: Joi.string().required(),
                 phone: Joi.string().required(),
-                address: Joi.string().required(),
+                address: Joi.object({
+                    province: Joi.string(),
+                    district: Joi.string(),
+                    ward: Joi.string(),
+                    street: Joi.string(),
+                }).optional(),
                 emergencyContactName: Joi.string().required(),
                 emergencyContactPhone: Joi.string().required(),
                 shirtSize: Joi.string().required(),
-                nameBib: Joi.string().required(),
+                nameBib: Joi.string().optional(),
                 timeEstimation: Joi.string().required(),
             }),
-            headers: Joi.object({
-                authorization: Joi.string().required()
-            }).options({allowUnknown: true}),
         }
     },
 }
