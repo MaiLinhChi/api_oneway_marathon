@@ -18,7 +18,7 @@ const schema = new Schema({
       },
       role: {
          type: String,
-         enum: ['captain', 'vice', 'member'],
+         enum: ['owner', 'vice', 'member'],
          default: 'member'
       },
       email: {

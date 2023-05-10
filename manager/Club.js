@@ -47,6 +47,13 @@ module.exports = {
     post: async (req) => {
         const { clubName } = req.payload;
         try {
+            const isExist = ClubModel.findOne({clubName: clubName.trim()})
+            if(isExist) return {
+                message: 'This club already exist',
+                status: false,
+                statusCode: 400,
+                messageKey: 'club_exist'
+            }
             const club = new ClubModel({
                 clubName
             });
