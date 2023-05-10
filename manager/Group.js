@@ -76,6 +76,13 @@ module.exports = {
                 } else {
                     req.payload.password = hash;
                     req.payload.updatedBy = 'register';
+                    const owner = {
+                        fullName: req.payload.fullName,
+                        email: req.payload.email,
+                        phone: req.payload.phone,
+                        role: 'owner',
+                        timeJoined: moment().unix()
+                    }
                     const model = new Model(req.payload)
                     model.save().then(resolve).catch(e => {
                         resolve({statusCode: 400, message: e.toString()})
