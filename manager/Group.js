@@ -8,6 +8,19 @@ const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
 
+const  generateRandomString = (length) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charactersLength = characters.length;
+    
+    for (let  i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charactersLength);
+        result += characters.charAt(randomIndex);
+      }
+    
+    return result;
+  }
+
 module.exports = {
     getById: (req) => {
         return Model.findOne({UserName: req.params.id}).then(item => {
@@ -70,12 +83,27 @@ module.exports = {
         }
         return new Promise(resolve => {
 
-            hashPassword(req.payload.password, (err, hash) => {
+            hashPassword(req.payload.password, async (err, hash) => {
                 if (err) {
                     resolve({statusCode: 400, message: err.toString()})
                 } else {
                     req.payload.password = hash;
                     req.payload.updatedBy = 'register';
+                    const owner = {
+                        fullName: req.payload.fullName,
+                        email: req.payload.email,
+                        phone: req.payload.phone,
+                        role: 'leader',
+                        timeJoined: moment().unix()
+                    }
+                    let randomString
+                    let isExistCode
+                    do {
+                        randomString = generateRandomString(8)
+                        isExistCode = await Model.findOne({groupCode: randomString})
+                    } while (isExistCode)
+                    req.payload.groupCode = randomString
+                    req.payload.membership = [owner]
                     const model = new Model(req.payload)
                     model.save().then(resolve).catch(e => {
                         resolve({statusCode: 400, message: e.toString()})

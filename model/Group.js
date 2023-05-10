@@ -5,11 +5,19 @@ const Schema    = mongoose.Schema;
 const moment = require('moment')
 
 const schema = new Schema({
- groupId: String,
  marathonId: String,
- groupName: String,
+ groupCode: String,
+ groupName: {
+   type: String,
+   trim: true
+ },
  password: String,
- status: {type: String, default: 'pending'},
+ status: {
+   type: String,
+   enum: ['pending', 'active'],
+   default: 'pending'
+},
+ slug: String,
  membership: [
    {
       userId: {
@@ -18,7 +26,7 @@ const schema = new Schema({
       },
       role: {
          type: String,
-         enum: ['captain', 'vice', 'member'],
+         enum: ['leader', 'vice', 'member'],
          default: 'member'
       },
       email: {
@@ -49,7 +57,5 @@ schema.pre("updateOne", function (next) {
  this.updatedAt = moment.utc().format('YYYY-MM-DD HH:mm:ss');
  next();
 });
-schema.index({ username: 1 });
-schema.index({ email: 1 }, { unique: true });
-schema.index({ mobile: 1 });
+
 module.exports = mongoose.model('group', schema);
