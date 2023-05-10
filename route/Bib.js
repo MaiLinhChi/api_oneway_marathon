@@ -10,21 +10,16 @@ module.exports = {
         handler: (req, res) => {
             return Response(req, res, 'putById');
         },
-        auth: {
-            strategy: 'jwt',
-        },
         validate: {
-            headers: Joi.object({
-                authorization: Joi.string().required()
-            }).options({allowUnknown: true}),
             params: Joi.object({
                 id: Joi.string().required(),
             }),
             payload: Joi.object({
-                gateway: Joi.string().optional(),
-                bankCode: Joi.string().optional(),
-                price: Joi.number().optional(),
-                status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
+                payment: Joi.object({
+                    gateway: Joi.string(),
+                    bankCode: Joi.string(),
+                    fee: Joi.number()
+                }),
                 bib: Joi.string().optional(),
             })
         }
