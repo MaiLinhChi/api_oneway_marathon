@@ -6,28 +6,50 @@ const moment = require('moment')
 
 const schema = new Schema({
  email: String,
- marathon: String,
+ marathon: {
+   marathonId: String,
+   // name: String,
+   distance: Number,
+   // imageEmail: String,
+   state: String,
+ },
  price: Number,
  bib: String,
- distance: Number,
- imageEmail: String, 
  fullName: String,
  birthday: String,
  gender: String,
  nationality: String,
  passport: String,
- gateway: String,
- bankCode: String,
+ payment: {
+    gateway: String,
+    bankCode: String,
+    fee: Number
+ },
  txnRef: String,
  phone: String,
- state: String,
- address: String,
+ address: {
+    province: String,
+    district: String,
+    ward: String,
+    street: {
+        type: String,
+        trim: true
+    }
+ },
+ vat: {
+    taxCode: String,
+    companyName: String,
+    companyAddress: {
+        type: String,
+        trim: true
+    }
+ },
  emergencyContactName: String,
  emergencyContactPhone: String,
  shirtSize: String,
  nameBib: String,
  timeEstimation: String,
- registerId: { type:String, unix: true },
+ registerId: { type:String, unique: true },
  sendMailOrder: {type: Boolean, default: false},
  sendMailRollBib: {type: Boolean, default: false},
  status: {type: String, default: 'pending'},

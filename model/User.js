@@ -17,6 +17,12 @@ const schema = new Schema({
  resendVerifyEmail: {type: Number, default: 0},
  timeResendVerifyEmail: Number,
  verified: {type: Boolean, default: false},
+ type: { // Loại account khi đăng kí tài khoản
+    type: String,
+    enum: ['normal', 'facebook', 'gmail'],
+    default: 'normal'
+ },
+ loginTime: Number,
  membership: Number,
  updatedAt: String,
  updatedBy: String,
