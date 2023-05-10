@@ -88,7 +88,7 @@ module.exports = {
             { email: { $regex: keyword, $options: 'i'} },
             { name: { $regex: keyword, $options: 'i'} },         
         ]} : {} 
-        const skip =  pageIndex - 1 || 0
+        const skip =  pageIndex ? pageIndex - 1 : 0
         const limit = pageSize || 20
         const sort = req.query.sort || 'asc'
 
