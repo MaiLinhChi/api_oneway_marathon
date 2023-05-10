@@ -12,6 +12,7 @@ const Group = require("../route/Group");
 const Province = require("../route/Province")
 const District = require("../route/District")
 const Ward = require("../route/Ward")
+const Club = require("../route/Club")
 
 module.exports = [
   {
@@ -101,4 +102,10 @@ module.exports = [
   { method: "GET", path: "/district", config: District.get },
   { method: "GET", path: "/ward", config: Ward.get },
   
+  // Club
+  { method: "GET", path: "/club", config: Club.get },
+  { method: "GET", path: "/club/{id}", config: Club.getById },
+  { method: "PUT", path: "/club/{id}", config: Club.update },
+  { method: "POST", path: "/club", config: Club.post },
+  { method: "DELETE", path: "/club/{id}", config: Club.delete },
 ];

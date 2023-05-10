@@ -6,7 +6,7 @@ const moment = require('moment')
 const COLLECTION_NAME = 'club'
 
 const schema = new Schema({
-    name : {
+    clubName : {
         type: String,
         require: true
     },
