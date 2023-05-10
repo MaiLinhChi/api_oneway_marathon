@@ -83,10 +83,12 @@ module.exports = {
         validate: {
             payload: Joi.object({
                 email: Joi.string().required(),
-                marathon: Joi.string().required(),
+                marathon: Joi.object({
+                    marathonId: Joi.string(),
+                    distance: Joi.number(),
+                    state: Joi.string(),
+                }),
                 price: Joi.number().required(),
-                state: Joi.string().required(),
-                distance: Joi.number().required(),
                 fullName: Joi.string().required(),
                 birthday: Joi.string().required(),
                 gender: Joi.string().valid('male', 'female').required(),
