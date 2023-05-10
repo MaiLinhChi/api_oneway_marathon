@@ -77,7 +77,7 @@
     "start": "pm2 start server.js --name apis --watch",
     "startidr": "pm2 start server.js --name apis --watch",
     "eslint": "./node_modules/.bin/eslint ./*/*.js",
-    "dev": "nodemon --exec 'npm run eslint & node server'"
+    "dev": "nodemon --exec \"npm run eslint & node server\""
   },
   "repository": {
     "type": "git",
