@@ -80,7 +80,7 @@ module.exports = {
                         fullName: req.payload.fullName,
                         email: req.payload.email,
                         phone: req.payload.phone,
-                        role: 'owner',
+                        role: 'leader',
                         timeJoined: moment().unix()
                     }
                     const model = new Model(req.payload)

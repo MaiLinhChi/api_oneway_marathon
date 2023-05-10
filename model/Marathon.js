@@ -7,12 +7,18 @@ const { string } = require('joi');
 const Joi = require("joi");
 
 const schema = new Schema({
-    "name" : String,
-    "description": String,
+    "name" : {
+        type: String,
+        trim: true
+    },
+    "description": {
+        type: String,
+        trim: true
+    },
     "startTime": String,
     "image": String,
     imageEmail: String,
-    status: {type: String, default: 'active'},
+    status: {type: String, default: 'pending'},
     race: [{
         routeMap: String,
         image: String,
