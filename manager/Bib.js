@@ -130,10 +130,10 @@ module.exports = {
         // }
         const model = new Model({
             email: req.payload.email,
-            state: req.payload.state,
+            // state: req.payload.state,
             marathon: req.payload.marathon,
             price: req.payload.price,
-            distance: req.payload.distance,
+            // distance: req.payload.distance,
             fullName: req.payload.fullName,
             birthday: req.payload.birthday,
             gender: req.payload.gender,
