@@ -98,7 +98,7 @@ module.exports = {
                     district: Joi.string(),
                     ward: Joi.string(),
                     street: Joi.string(),
-                }),
+                }).optional(),
                 emergencyContactName: Joi.string().required(),
                 emergencyContactPhone: Joi.string().required(),
                 shirtSize: Joi.string().required(),
