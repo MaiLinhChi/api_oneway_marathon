@@ -8,7 +8,6 @@ const schema = new Schema({
  email: String,
  marathon: {
    marathonId: String,
-   // name: String,
    distance: Number,
    // imageEmail: String,
    state: String,
