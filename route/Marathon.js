@@ -33,6 +33,7 @@ module.exports = {
                 race: Joi.array().min(1).items(Joi.object({
                     image: Joi.string().optional(),
                     distance: Joi.number().required().description('race track length in meters'),
+                    unit: Joi.string().required(),
                     routeMap: Joi.string().required().description('image router map'),
                     award: Joi.object({
                         male: Joi.number().min(1000).required().description('award on vnd'),
@@ -146,6 +147,7 @@ module.exports = {
                 race: Joi.array().min(1).items(Joi.object({
                     image: Joi.string().required(),
                     distance: Joi.number().required().description('race track length in meters'),
+                    unit: Joi.string().required(),
                     routeMap: Joi.string().required().description('image router map'),
                     award: Joi.object({
                         male: Joi.number().min(1000).required().description('award on vnd'),

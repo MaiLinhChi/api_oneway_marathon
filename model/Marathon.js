@@ -22,7 +22,8 @@ const schema = new Schema({
     race: [{
         routeMap: String,
         image: String,
-        distance: Number, // m
+        distance: Number,
+        unit: String,
         award: {
             male: Number,
             female: Number,
