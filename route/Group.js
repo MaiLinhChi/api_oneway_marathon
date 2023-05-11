@@ -58,7 +58,6 @@ module.exports = {
       //     authorization: Joi.string().required()
       // }).options({allowUnknown: true}),
       query: Joi.object({
-        groupId: Joi.string().optional(),
         marathonId: Joi.string().optional(),
         groupName: Joi.string().optional(),
         fullName: Joi.string().optional(),
@@ -69,8 +68,8 @@ module.exports = {
         keyword: Joi.string().optional(),
         fromDate: Joi.string().optional(),
         toDate: Joi.string().optional(),
-        limit: Joi.number().default(20),
-        skip: Joi.number().default(0),
+        pageSize: Joi.number().default(20),
+        pageIndex: Joi.number().default(1),
         sort: Joi.number().valid("desc", "asc"),
       }),
     },
