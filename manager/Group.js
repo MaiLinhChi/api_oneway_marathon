@@ -24,9 +24,9 @@ const  generateRandomString = (length) => {
 
 module.exports = {
     getById: (req) => {
-        return Model.findOne({UserName: req.params.id}).then(item => {
+        return Model.findOne({_id: req.params.id}).then(data => {
             return {
-                item
+                data
             }
         })
     },
