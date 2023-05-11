@@ -111,7 +111,7 @@ module.exports = {
                         data: rs,
                         messageKey: 'post_success'
                     })).catch(e => {
-                        resolve({statusCode: 400, message: e.toString()})
+                       resolve({statusCode: 400, message: e.toString()})
                     })
                 }
             });
