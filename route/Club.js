@@ -23,6 +23,7 @@ module.exports = {
         },
         validate: {
             query: Joi.object({
+                keyword: Joi.string().allow('', null),
                 clubName: Joi.string(),
                 pageSize: Joi.number().default(20),
                 pageIndex: Joi.number().default(1),

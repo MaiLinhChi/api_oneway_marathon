@@ -116,4 +116,27 @@ module.exports = {
       }),
     },
   },
+  // loginGroup: {
+  //   tags: ['api', 'Group'],
+  //   description: 'login group',
+  //   handler: (req, res) => {
+  //       return Response(req, res, 'post');
+  //   },
+  //   auth: {
+  //       strategy: 'jwt',
+  //   },
+  //   validate: {
+  //       payload: Joi.object({
+  //           marathonId: Joi.string().required(),
+  //           groupName: Joi.string().required(),
+  //           password: Joi.string().required(),
+  //           fullName: Joi.string().required(),
+  //           email: Joi.string().required(),
+  //           phone: Joi.string().required(),
+  //       }),
+  //       headers: Joi.object({
+  //           authorization: Joi.string().required()
+  //       }).options({allowUnknown: true}),
+  //   }
+  // },
 };

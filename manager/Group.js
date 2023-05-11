@@ -4,6 +4,7 @@
 const { hashPassword } = require('../utils/userFunctions');
 const bcrypt = require('bcrypt');
 const Model = require('../model/Group')
+const MarathonModel = require('../model/Marathon')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
@@ -63,11 +64,13 @@ module.exports = {
             CreatedOn: sort
         }).lean().then(async rs => {
             const totalRecord = await Model.countDocuments({$and: [options, keywordCondition]})
-            const newRes = rs.map(r=>{
+            const newRes = await Promise.all(rs.map(async r=>{
+                const marathon = await MarathonModel.findOne({_id: r.marathonId}).lean()
                 return {
                 ...r,
+                marathonName: marathon.name
                 }
-            })
+            }))
             return {
                 totalRecord,
                 totalPaging: Math.ceil(totalRecord / limit),

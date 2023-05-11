@@ -17,7 +17,6 @@ const schema = new Schema({
    enum: ['pending', 'active'],
    default: 'pending'
 },
- slug: String,
  membership: [
    {
       userId: {
@@ -35,7 +34,7 @@ const schema = new Schema({
          type: String,
          trim: true
       },
-      timeJoined: String
+      timeJoined: Number
    }
  ],
  updatedAt: String,
