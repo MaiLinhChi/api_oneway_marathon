@@ -29,10 +29,7 @@ const schema = new Schema({
          enum: ['leader', 'vice', 'member'],
          default: 'member'
       },
-      email: {
-         type: String,
-         unique: true
-      },
+      email: String,
       phone: String,
       fullName: {
          type: String,
