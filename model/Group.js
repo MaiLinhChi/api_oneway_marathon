@@ -7,6 +7,7 @@ const moment = require('moment')
 const schema = new Schema({
  marathonId: String,
  groupCode: String,
+ linkJoin: String,
  groupName: {
    type: String,
    trim: true
