@@ -60,6 +60,7 @@ const schema = new Schema({
         description: String,
     }],
     location: String,
+    slug: String,
     type: String,
     updatedAt: String,
     updatedBy: String,

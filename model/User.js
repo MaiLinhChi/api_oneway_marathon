@@ -42,6 +42,6 @@ schema.pre("updateOne", function (next) {
  next();
 });
 schema.index({ username: 1 });
-schema.index({ email: 1 }, { unique: true });
+schema.index({ email: 1 });
 schema.index({ mobile: 1 });
 module.exports = mongoose.model('user', schema);
