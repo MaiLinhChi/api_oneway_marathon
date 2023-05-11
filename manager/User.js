@@ -127,17 +127,17 @@ module.exports = {
             CreatedOn: sort
         }).then(async rs => {
             const totalRecord = await Model.countDocuments({$and: [options, keywordCondition]})
-            const newRes = rs.map(r=>{
-                const {_id, ...res} = r._doc
-                return {
-                ...res,
-                userId:  mUUID4.toString(_id)
-                }
-            })
+            // const newRes = rs.map(r=>{
+            //     const {_id, ...res} = r._doc
+            //     return {
+            //     ...res,
+            //     userId:  mUUID4.toString(_id)
+            //     }
+            // })
             return {
                 totalRecord,
                 totalPaging: Math.ceil(totalRecord / limit),
-                data: newRes
+                data: rs
             }
         })
     },

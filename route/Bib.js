@@ -99,7 +99,8 @@ module.exports = {
                     taxCode: Joi.string(),
                     companyName: Joi.string(),
                     companyAddress: Joi.string()
-                }).optional()
+                }).optional(),
+                clubId: Joi.string().optional()
             }),
         }
     },
