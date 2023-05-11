@@ -93,7 +93,7 @@ module.exports = {
                 emergencyContactName: Joi.string().required(),
                 emergencyContactPhone: Joi.string().required(),
                 shirtSize: Joi.string().required(),
-                nameBib: Joi.string().optional(),
+                nameBib: Joi.string().optional().allow(''),
                 timeEstimation: Joi.string().required(),
                 vat: Joi.object({
                     taxCode: Joi.string(),
