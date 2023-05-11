@@ -24,9 +24,20 @@ const  generateRandomString = (length) => {
 
 module.exports = {
     getById: (req) => {
-        return Model.findOne({_id: req.params.id}).then(data => {
+        return Model.findOne({_id: req.params.id}).select('-password -__v -createdAt').lean().then(async data => {
+            const marathon = await MarathonModel.findOne({_id: data.marathonId})
+            if (!marathon) return {
+                message: 'marathon does not existed',
+                statusCode: 404,
+                messageKey: 'not_found'
+            }
+            const res = {
+                ...data,
+                marathonName: marathon.name,
+                startTime: marathon.startTime
+            }
             return {
-                data
+                res
             }
         })
     },
@@ -84,6 +95,12 @@ module.exports = {
             if(group.verified && group.username) return {statusCode: 400, message: 'email is existed !', errorCode: 'EMAIL_EXISTED'};
             // return sendCodeVerify(req, user)
         }
+        const marathon = await MarathonModel.findOne({_id: req.payload.marathonId}).lean()
+        if (!marathon) return {
+            message: 'marathon does not existed',
+            statusCode: 404,
+            messageKey: 'not_found'
+        }
         return new Promise(resolve => {
 
             hashPassword(req.payload.password, async (err, hash) => {
@@ -107,6 +124,7 @@ module.exports = {
                     } while (isExistCode)
                     req.payload.groupCode = randomString
                     req.payload.membership = [owner]
+                    req.payload.linkJoin = `${process.env.URL_CLIENT}/${marathon.slug}/${randomString}`
                     const model = new Model(req.payload)
                     model.save().then(rs => resolve({
                         message: 'success',
