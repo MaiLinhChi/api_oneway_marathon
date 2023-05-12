@@ -76,6 +76,7 @@ module.exports = {
                     marathonId: Joi.string(),
                     distance: Joi.number(),
                     state: Joi.string(),
+                    unit: Joi.string()
                 }),
                 price: Joi.number().required(),
                 fullName: Joi.string().required(),

@@ -20,10 +20,6 @@ const schema = new Schema({
 },
  membership: [
    {
-      userId: {
-         type: String,
-         default: null
-      },
       role: {
          type: String,
          enum: ['leader', 'vice', 'member'],
