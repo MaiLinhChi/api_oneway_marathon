@@ -75,10 +75,10 @@ module.exports = {
         })
     },
     get: (req) => {
-        const { txnRef, status, fromDate, toDate } = req.query;
+        const { txnRef, status, fromDate, toDate, pageIndex, pageSize } = req.query;
         const options = {};
-        const skip = req.query.skip || 0;
-        const limit = req.query.limit || 20;
+        const skip = pageIndex ? pageIndex -1 : 0;
+        const limit = pageSize || 20;
         const sort = req.query.sort || "desc";
 
         if (status) options.status = status;

@@ -62,14 +62,12 @@ module.exports = {
         if(groupName) options.groupName = groupName
         if(fullName) options.fullName = { $regex: new RegExp(req.query.fullName), $options: 'i' }
         if(phone) options.phone = phone
-        if(email) options.email = email
-        if(role) options.role = role
-        // if(fromDate && toDate) options.CreatedOn = {$gte: new Date(fromDate), $lte: new Date(toDate)}
+        if(email) options.membership = {$elemMatch: {email}}
+        if(role) options.membership = {$elemMatch: {role}}
+        // if(fullName) options.membership = {$elemMatch: {fullName: { $regex: new RegExp(req.query.fullName), $options: 'i' }}}
         if(fromDate || toDate) options.CreatedOn = {}
         if(fromDate) options.CreatedOn.$gte =  new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY"))
         if(toDate) options.CreatedOn.$lte =  new Date(moment(toDate, 'DD/MM/YYYY').format("MM/DD/YYYY"))
-        console.log(new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
-        console.log(new Date(moment(toDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
         
         return Model.find({$and: [options, keywordCondition]}).limit(limit).skip(skip * limit).sort({
             CreatedOn: sort
