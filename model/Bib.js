@@ -11,6 +11,7 @@ const schema = new Schema({
    distance: Number,
    // imageEmail: String,
    state: String,
+   unit: String
  },
  price: Number,
  bib: String,
