@@ -6,7 +6,7 @@
 const bcrypt = require('bcrypt');
 const Model = require('../model/User');
 const moment = require("moment");
-
+const sendGrid = require('./sendgrid')
 const countryCode = {
     vn: '84'
 }
@@ -45,9 +45,23 @@ const verifyCredentialsAdmin = (req, res) => {
 }
 const verifyCredentials = (req, res) => {
     const { username, password } = req.payload;
-    return Model.findOne({ $or: [{username: username}, {email: username, role: 'user'}]}).then(user => {
+    return Model.findOne({ $or: [{username: username}, {email: username, role: 'user'}]}).then(async user => {
         // console.log(user)
         if (user) {
+            if (user.status === 'pending') {
+                const code = Math.floor(1000 + Math.random() * 9000)
+                const msg = {
+                    to: user.email, // Change to your recipient
+                    from: 'admin@onewaymarathon.com', // Change to your verified sender
+                    subject: 'One Way register verify',
+                    text: 'Your code to verify One Way account: ' + code,
+                }
+                await sendGrid.send(msg)
+                await user.updateOne({
+                    verifyEmail: code,
+                    timeResendVerifyEmail: moment.utc().unix(),
+                })
+            }
             return new Promise((resolve) => {
                 bcrypt.compare(password, user.password, (err, isValid) => {
                     if (err) res.response({statusCode: 400, message: 'Incorrect Password!'});
