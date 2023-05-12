@@ -121,25 +121,7 @@ module.exports = {
         // } else if(isHaving && isHaving.passport === req.payload.passport) {
         //     return {statusCode: 400, message: 'Passport is existed !', errorCode: 'PASSPORT_EXISTED'};
         // }
-        const model = new Model({
-            email: req.payload.email,
-            // state: req.payload.state,
-            marathon: req.payload.marathon,
-            price: req.payload.price,
-            // distance: req.payload.distance,
-            fullName: req.payload.fullName,
-            birthday: req.payload.birthday,
-            gender: req.payload.gender,
-            nationality: req.payload.nationality,
-            passport: req.payload.passport,
-            phone: req.payload.phone,
-            address: req.payload.address,
-            emergencyContactName: req.payload.emergencyContactName,
-            emergencyContactPhone: req.payload.emergencyContactPhone,
-            shirtSize: req.payload.shirtSize,
-            nameBib: req.payload.nameBib,
-            timeEstimation: req.payload.timeEstimation,
-        })
+        const model = new Model(req.payload)
         return new Promise(resolve => {
             model.save().then((obj) => resolve({status: 200, message: "Register suscess", data: obj})).catch(e => {
                 resolve({statusCode: 400, message: e.toString()})
