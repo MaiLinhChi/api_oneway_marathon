@@ -189,17 +189,4 @@ module.exports = {
             return Response(req, res, 'putPassword');
         },
     },
-    verifyOTP: {
-        tags: ['api', 'Users'],
-        description: 'verify OTP',
-        validate: {
-            payload: Joi.object({
-                email: Joi.string().required(),
-                otp: Joi.string().required()
-            }),
-        },
-        handler: (req, res) => {
-            return Response(req, res, 'verifyOTP');
-        },
-    }
 }
