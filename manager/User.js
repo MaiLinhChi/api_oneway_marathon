@@ -142,11 +142,10 @@ module.exports = {
         })
     },
     post: async (req) => {
-        const user = await Model.findOne({email: req.payload.email});
-        if(user) {
-            if(user.verified && user.username) return {statusCode: 400, message: 'email is existed !', errorCode: 'EMAIL_EXISTED'};
-            // return sendCodeVerify(req, user)
-        }
+        const isDupEmail = await Model.exists({email: req.payload.email});
+        const isDupUsername = await Model.exists({username: req.payload.username});
+        if(isDupEmail) return {statusCode: 400, message: 'email is existed!', messageKey: 'email_exist'};
+        if(isDupUsername) return {statusCode: 400, message: 'username is existed!', messageKey: 'username_exist'};
         return new Promise(resolve => {
 
             hashPassword(req.payload.password, (err, hash) => {
