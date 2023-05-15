@@ -92,9 +92,9 @@ module.exports = {
         return sendCodeResetPass(req, user)
     },
     getById: (req) => {
-        return Model.findOne({UserName: req.params.id}).then(item => {
+        return Model.findOne({_id: req.params.id}).select('-password -__v').then(data => {
             return {
-                item
+                data
             }
         })
     },
