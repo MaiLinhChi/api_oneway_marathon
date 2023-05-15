@@ -195,6 +195,10 @@ module.exports = {
             return {statusCode: 400, message: 'Invalid credential', messageKey: 'invalid_password'};
 
     },
+    verifyOTP: (req) => {
+        const {email, otp} = req.payload
+        
+    }
 }
 
 
