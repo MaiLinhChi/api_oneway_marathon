@@ -12,11 +12,7 @@ const schema = new Schema({
  mobile: String,
  avatar: String,
  role: {type: String, default: 'user'},
- status: {
-   type: String,
-   enum: ['pending', 'active'],
-   default: 'pending'
-},
+ status: {type: String, default: 'active'},
  verifyEmail: String,
  resendVerifyEmail: {type: Number, default: 0},
  timeResendVerifyEmail: Number,
