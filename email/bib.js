@@ -92,7 +92,7 @@ module.exports = {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Vé ${order.state} - Cự ly ${order.distance}km</td>
+                                    <td>Vé ${order.marathon.state} - Cự ly ${order.marathon.distance} ${order.marathon.unit}</td>
                                     <td>x1</td>
                                     <td style="float: right;">${order.price}đ</td>
                                 </tr>
@@ -109,7 +109,7 @@ module.exports = {
                         <h1>Quy định và thể lệ:</h1>
                         <p>
                             Mọi thắc mắc về quy định hoàn trả vé bạn truy cập tại đây.<br>
-                            Hãy liên hệ chúng tôi qua Website <a href="https://onewaymarathon.com/contact">onewaymarathon.com/contact</a> hoặc Hotline 08 1800 7898<a href="https://onewaymarathon.com">Tại đây</a> để được lắng nghe và hỗ trợ nhanh nhất.
+                            Hãy liên hệ chúng tôi qua Website <a href="https://onewaymarathon.com/contact">onewaymarathon.com/contact</a> hoặc Hotline 08 1800 7898 <a href="https://onewaymarathon.com">Tại đây</a> để được lắng nghe và hỗ trợ nhanh nhất.
                         </p>
                     </div>
                 </div>
