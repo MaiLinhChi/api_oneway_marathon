@@ -6,12 +6,12 @@ const mongoose        = require("mongoose");
 module.exports = {
     get: async (req) => {
         const options = {};
-        const { name, keyword, page, pageSize } = req.query;
+        const { name, keyword, pageIndex, pageSize } = req.query;
         try {
             const keywordCondition = keyword ? { $or:[
                 { name: { $regex: keyword, $options: 'i'} },
             ]} : {} 
-            const skip = page ? page -1 : 0
+            const skip = pageIndex ? pageIndex -1 : 0
             const limit = pageSize || 20
             const sort = req.query.sort || 'desc'
             if(name) options.name = { $regex: new RegExp(name), $options: 'i' }
