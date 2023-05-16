@@ -2,6 +2,7 @@
 
 const IpnModel = require("../model/VNPIPN");
 const BibModel = require("../model/Bib");
+const MarathonModel = require("../model/Marathon")
 const moment = require("moment");
 const { sortObject } = require("../utils/payment");
 const querystring = require("qs");
@@ -10,6 +11,7 @@ const { default: mongoose } = require("mongoose");
 const { paymentBib } = require("../email/bib");
 const Sendgrid = require('../utils/sendgrid');
 const { v4: uuidv4 } = require('uuid');
+const Marathon = require("../model/Marathon");
 
 module.exports = {
     getIpn: async (req) => {
@@ -51,10 +53,11 @@ module.exports = {
 
             if(req.query.vnp_TransactionStatus === '00') {
                 const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
+                const marathon = await MarathonModel.findOne({_id: paymentedModel.marathon.marathonId}).lean()
                 const msg = {
                     to: paymentedModel.email, // Change to your recipient
                     from: 'admin@onewaymarathon.com', // Change to your verified sender
-                    subject: `Xác nhận đăng ký thành công Oneway marathon ${paymentedModel.marathon}`,
+                    subject: `Xác nhận đăng ký thành công Oneway marathon ${marathon.name}`,
                     html: paymentBib(bib, process.env.URL_CLIENT),
                 }
                 const result = await Sendgrid.send(msg);
