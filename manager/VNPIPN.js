@@ -54,6 +54,7 @@ module.exports = {
             if(req.query.vnp_TransactionStatus === '00') {
                 const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
                 const marathon = await MarathonModel.findOne({_id: paymentedModel.marathon.marathonId}).lean()
+                bib.marathon.name = marathon.name
                 const msg = {
                     to: paymentedModel.email, // Change to your recipient
                     from: 'admin@onewaymarathon.com', // Change to your verified sender
