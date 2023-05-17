@@ -66,6 +66,7 @@ module.exports = {
             type: req.payload.type,
             location: req.payload.location,
             race: req.payload.race,
+            priceList: req.payload.priceList,
             registerGroup: req.payload.registerGroup,
             raceKit: req.payload.raceKit,
             service: req.payload.service,

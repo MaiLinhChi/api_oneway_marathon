@@ -7,34 +7,36 @@ const { string } = require('joi');
 const Joi = require("joi");
 
 const schema = new Schema({
-    "name" : {
+    name: {
         type: String,
         trim: true
     },
-    "description": {
+    description: {
         type: String,
         trim: true
     },
-    "startTime": String,
-    "image": String,
+    startTime: String,
+    image: String,
     imageEmail: String,
     status: {type: String, default: 'pending'},
+    unitRace: String,
     race: [{
         routeMap: String,
         image: String,
         distance: Number,
-        unit: String,
         award: {
             male: Number,
             female: Number,
         },
-        price: [{
-            name: String,
-            startSell: String,
-            endSell: String,
-            individual: Number,
-            group: Number, // vnd
-        }]
+    }],
+    priceList: [{
+        name: String,
+        startSell: String,
+        endSell: String,
+        individual: [{
+            price: Number,
+            distance: Number,
+        }],
     }],
     registerGroup: [{
         numberPerson: {
