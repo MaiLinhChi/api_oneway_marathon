@@ -39,7 +39,6 @@ module.exports = {
                         male: Joi.number().min(1000).optional().description('award on vnd'),
                         female: Joi.number().min(1000).optional().description('award on vnd'),
                     }),
-                    _id: Joi.string().optional(),
                 })).optional(),
                 priceList: Joi.array().min(1).items(Joi.object({
                     name: Joi.string().optional(),
@@ -48,6 +47,7 @@ module.exports = {
                     individual: Joi.array().min(1).items(Joi.object({
                         distance: Joi.number().optional(),
                         price: Joi.number().min(1000).optional().description('price tiket on vnd'),
+                        _id: Joi.string().optional(),
                     })).optional(),
                     _id: Joi.string().optional(),
                 })).optional(),
