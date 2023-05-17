@@ -30,15 +30,16 @@ module.exports = {
                 description: Joi.string().optional(),
                 status: Joi.string().valid('active', 'inactive').optional(),
                 startTime: Joi.string().optional(),
+                unitRace: Joi.string().optional(),
                 race: Joi.array().min(1).items(Joi.object({
                     image: Joi.string().optional(),
                     distance: Joi.number().optional().description('race track length in kilomets'),
-                    unit: Joi.string().optional(),
                     routeMap: Joi.string().optional().description('image router map'),
                     award: Joi.object({
                         male: Joi.number().min(1000).optional().description('award on vnd'),
                         female: Joi.number().min(1000).optional().description('award on vnd'),
                     }),
+                    _id: Joi.string().optional(),
                 })).optional(),
                 priceList: Joi.array().min(1).items(Joi.object({
                     name: Joi.string().optional(),
