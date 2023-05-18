@@ -3,6 +3,7 @@
 
 const Model = require('../model/Bib')
 const PaymentMethodModel = require('../model/PaymentMethod')
+const MarathonModel = require('../model/Marathon')
 const moment = require("moment");
 const {vnpayPaymentMethod} = require("../utils/payment");
 
@@ -59,10 +60,19 @@ module.exports = {
         })
     },
     getById: (req) => {
-        return Model.findOne({_id: req.params.id}).then(item => {
+        return Model.findOne({_id: req.params.id}).then(async (item) => {
+            const marathon = await MarathonModel.findOne({_id: item.marathon.marathonId})
             if(item) {
+                const bib = item._doc
                 return {
-                    data: item,
+                    data: {
+                        ...bib,
+                        marathon: {
+                            ...bib.marathon,
+                            name: marathon.name,
+                            startTime: marathon.startTime
+                        }
+                    },
                     status: 200
                 }
             }
