@@ -9,9 +9,9 @@ const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
 
-const  generateRandomString = (length) => {
+const generateRandomString = (length) => {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const charactersLength = characters.length;
     
     for (let  i = 0; i < length; i++) {
@@ -23,6 +23,7 @@ const  generateRandomString = (length) => {
   }
 
 module.exports = {
+    generateRandomString,
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).select('-password -__v -createdAt').lean().then(async data => {
             const marathon = await MarathonModel.findOne({_id: data.marathonId})
