@@ -12,6 +12,7 @@ const { paymentBib } = require("../email/bib");
 const Sendgrid = require('../utils/sendgrid');
 const { v4: uuidv4 } = require('uuid');
 const Marathon = require("../model/Marathon");
+const { generateRandomString } = require("./Group");
 
 module.exports = {
     getIpn: async (req) => {
@@ -47,7 +48,7 @@ module.exports = {
             let isExitRegisterId;
             let registerId;
             do {
-                registerId = uuidv4();
+                registerId = generateRandomString(8);
                 isExitRegisterId = await BibModel.findOne({registerId});
             } while (isExitRegisterId);
 
