@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 module.exports = {
     paymentBib: (order, url) => {
         return (
@@ -56,7 +58,7 @@ module.exports = {
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Ngày sinh</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.birthday}</th>
+                                <th style="padding: 10px; display: block; float: right;">${moment(order.birthday).format("DD/MM/YYYY")}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Số điện thoại</td>
