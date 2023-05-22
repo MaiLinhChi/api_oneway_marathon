@@ -73,7 +73,7 @@ module.exports = {
         })
     },
     get:  (req) => {
-        const {keyword, status, email, marathons, price, fromDate, toDate, pageSize, pageIndex} = req.query
+        const {keyword, status, email, marathon, price, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = {}
         const keywordCondition = keyword ? { $or:[
             { username: { $regex: keyword, $options: 'i'} },
@@ -86,8 +86,8 @@ module.exports = {
         const sort = req.query.sort || 'asc'
 
         if(status) options.status = status
-        if(email) options.email = { $regex: new RegExp(req.query.Name), $options: 'i' }
-        if(marathons) options.marathons = marathons
+        if(email) options.email = { $regex: new RegExp(req.query.email), $options: 'i' }
+        if(marathon) options["marathon.marathonId"] = marathon
         if(price) options.price = price
         // if(fromDate && toDate) options.CreatedOn = {$gte: new Date(fromDate), $lte: new Date(toDate)}
         if(fromDate || toDate) options.CreatedOn = {}
