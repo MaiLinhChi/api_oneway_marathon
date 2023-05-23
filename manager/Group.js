@@ -80,7 +80,9 @@ module.exports = {
                 const marathon = await MarathonModel.findOne({_id: r.marathonId}).lean()
                 return {
                 ...r,
-                marathonName: marathon.name
+                marathonName: marathon.name,
+                location: marathon.location,
+                startTime: marathon.startTime,
                 }
             }))
             return {
