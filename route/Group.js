@@ -111,25 +111,20 @@ module.exports = {
   },
   // loginGroup: {
   //   tags: ['api', 'Group'],
-  //   description: 'login group',
+  //   description: 'Authenticate',
+  //   pre: [
+  //       { method: verifyCredentials, assign: 'group' }
+  //   ],
   //   handler: (req, res) => {
-  //       return Response(req, res, 'post');
-  //   },
-  //   auth: {
-  //       strategy: 'jwt',
+  //       if(req.pre.group.statusCode) return res.response(req.pre.group).code(req.pre.group.statusCode)
+  //       Reflect.deleteProperty(req.pre.group, 'password');
+  //       return res.response({ token: createToken(req.pre.group) }).code(200);
   //   },
   //   validate: {
   //       payload: Joi.object({
-  //           marathonId: Joi.string().required(),
-  //           groupName: Joi.string().required(),
-  //           password: Joi.string().required(),
-  //           fullName: Joi.string().required(),
-  //           email: Joi.string().required(),
-  //           phone: Joi.string().required(),
-  //       }),
-  //       headers: Joi.object({
-  //           authorization: Joi.string().required()
-  //       }).options({allowUnknown: true}),
+  //           username: Joi.string().required(),
+  //           password: Joi.string().required()
+  //       })
   //   }
   // },
 };
