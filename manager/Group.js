@@ -161,6 +161,26 @@ module.exports = {
         return error;
         }
     },
+    loginGroup: (req) => {
+        const { password, _id } = req.payload;
+        return Model.findOne({_id: _id}).then(group => {
+            if (!group) return {statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'}
+            return new Promise(resolve => {
+                bcrypt.compare(password, group.password, (err, isValid) => {
+                    if (err) return {statusCode: 400, message: 'Incorrect Password!'};
+                    if (isValid) {
+                        const { password, ...rest } = group._doc;
+                        resolve({group: {...rest}, statusCode: 200, messageKey: 'login_group_success'});
+                    } else {
+                        resolve({statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'})
+                    }
+                });
+            })
+        }).catch(e => {
+            console.log(e.toString())
+            return {statusCode: 400, message: e.toString()}
+        })
+    },
 }
 
 

@@ -109,22 +109,17 @@ module.exports = {
       }),
     },
   },
-  // loginGroup: {
-  //   tags: ['api', 'Group'],
-  //   description: 'Authenticate',
-  //   pre: [
-  //       { method: verifyCredentials, assign: 'group' }
-  //   ],
-  //   handler: (req, res) => {
-  //       if(req.pre.group.statusCode) return res.response(req.pre.group).code(req.pre.group.statusCode)
-  //       Reflect.deleteProperty(req.pre.group, 'password');
-  //       return res.response({ token: createToken(req.pre.group) }).code(200);
-  //   },
-  //   validate: {
-  //       payload: Joi.object({
-  //           username: Joi.string().required(),
-  //           password: Joi.string().required()
-  //       })
-  //   }
-  // },
+  loginGroup: {
+    tags: ['api', 'Group'],
+    description: 'Authenticate',
+    handler: (req, res) => {
+      return Response(req, res, "loginGroup");
+    },
+    validate: {
+        payload: Joi.object({
+            _id: Joi.string().required(),
+            password: Joi.string().required()
+        })
+    }
+  },
 };
