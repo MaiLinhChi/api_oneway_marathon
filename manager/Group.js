@@ -43,13 +43,14 @@ module.exports = {
         })
     },
     get:  (req) => {
-        const {keyword, groupId, marathonId, groupName, fullName, email, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
+        const {keyword, groupId, marathonId, groupCode, groupName, fullName, email, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = {}
         const keywordCondition = keyword ? { $or:[
             { groupId: { $regex: keyword, $options: 'i'} },  
             { marathonId: { $regex: keyword, $options: 'i'} },  
             { fullName: { $regex: keyword, $options: 'i'} },
             { groupName: { $regex: keyword, $options: 'i'} },
+            { groupCode: { $regex: keyword, $options: 'i'} },
             { email: { $regex: keyword, $options: 'i'} },
             { phone: { $regex: keyword, $options: 'i'} },
             { role: { $regex: keyword, $options: 'i'} },  
@@ -61,6 +62,7 @@ module.exports = {
         if(groupId) options.groupId = groupId
         if(marathonId) options.marathonId = marathonId
         if(groupName) options.groupName = groupName
+        if(groupCode) options.groupCode = groupCode
         if(fullName) options.fullName = { $regex: new RegExp(req.query.fullName), $options: 'i' }
         if(phone) options.phone = phone
         if(email) options.membership = {$elemMatch: {email}}

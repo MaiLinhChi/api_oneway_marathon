@@ -60,6 +60,7 @@ module.exports = {
       query: Joi.object({
         marathonId: Joi.string().optional(),
         groupName: Joi.string().optional(),
+        groupCode: Joi.string().optional(),
         fullName: Joi.string().optional(),
         email: Joi.string().optional(),
         phone: Joi.string().optional(),
