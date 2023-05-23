@@ -90,7 +90,8 @@ module.exports = [
     path: "/ipn/{id}",
     config: Ipn.deleteById,
   },
-
+  
+  { method: "POST", path: "/group/authenticate", config: Group.loginGroup },
   { method: "POST", path: "/group", config: Group.post },
   { method: "GET", path: "/groups", config: Group.get },
   { method: "GET", path: "/group/{id}", config: Group.getById },
