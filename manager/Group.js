@@ -89,9 +89,9 @@ module.exports = {
         })
     },
     post: async (req) => {
-        const group = await Model.findOne({email: req.payload.email});
+        const group = await Model.findOne({groupName: req.payload.groupName});
         if(group) {
-            if(group.verified && group.username) return {statusCode: 400, message: 'email is existed !', errorCode: 'EMAIL_EXISTED'};
+            if(group.groupName) return {statusCode: 400, message: 'Group name is existed !', errorCode: 'GROUP NAME_EXISTED'};
             // return sendCodeVerify(req, user)
         }
         const marathon = await MarathonModel.findOne({_id: req.payload.marathonId}).lean()
