@@ -89,9 +89,9 @@ module.exports = {
         })
     },
     post: async (req) => {
-        const group = await Model.findOne({email: req.payload.email});
+        const group = await Model.findOne({groupName: req.payload.groupName});
         if(group) {
-            if(group.verified && group.username) return {statusCode: 400, message: 'email is existed !', errorCode: 'EMAIL_EXISTED'};
+            if(group.groupName) return {statusCode: 400, message: 'Group name is existed !', errorCode: 'GROUP NAME_EXISTED'};
             // return sendCodeVerify(req, user)
         }
         const marathon = await MarathonModel.findOne({_id: req.payload.marathonId}).lean()
@@ -160,6 +160,26 @@ module.exports = {
         } catch (error) {
         return error;
         }
+    },
+    loginGroup: (req) => {
+        const { password, _id } = req.payload;
+        return Model.findOne({_id: _id}).then(group => {
+            if (!group) return {statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'}
+            return new Promise(resolve => {
+                bcrypt.compare(password, group.password, (err, isValid) => {
+                    if (err) return {statusCode: 400, message: 'Incorrect Password!'};
+                    if (isValid) {
+                        const { password, ...rest } = group._doc;
+                        resolve({group: {...rest}, statusCode: 200, messageKey: 'login_group_success'});
+                    } else {
+                        resolve({statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'})
+                    }
+                });
+            })
+        }).catch(e => {
+            console.log(e.toString())
+            return {statusCode: 400, message: e.toString()}
+        })
     },
 }
 
