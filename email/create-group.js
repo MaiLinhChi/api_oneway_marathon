@@ -15,7 +15,7 @@ module.exports = {
                                 color: black;
                             }
                             .wrapper-top {
-                                padding: 20px;
+                                padding: 20px 20px 0 20px;
                             }
                             .wrapper-bottom {
                                 padding: 20px;
@@ -41,7 +41,6 @@ module.exports = {
                                 background: #E6EBF0;
                                 padding: 20px;
                                 max-width: 100%;
-                                width: 100%;
                             }
                             .btn-copy {
                                 margin-left: auto;
@@ -104,7 +103,7 @@ module.exports = {
                                 </div>
                                 <div class="instruct font-size">
                                     <p>Hướng dẫn: Để đăng ký theo nhóm (từ 2 người) bạn cần làm theo các bước sau:</p>
-                                    <ul>
+                                    <ul style="padding-left: 20px;">
                                         <li>Bước 1: Chia sẻ “link đăng ký nhóm” bên trên cho bạn bè.</li>
                                         <li>Bước 2: Các vận động viên truy cập link và điền thông tin cần thiết.</li>
                                         <li>Bước 3: Trưởng nhóm hoàn tất đăng ký và tiến hành thanh toán.</li>

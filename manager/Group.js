@@ -158,6 +158,28 @@ module.exports = {
         })
 
     },
+    joinGroup: async (req) => {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) return {statusCode: 400, message: 'Group does not existed !', messageKey: 'group_not_existed'};
+        const group = await Model.findOne({_id: req.params.id});
+        if(!group) return {statusCode: 400, message: 'Group does not existed !', messageKey: 'group_not_existed'};
+        const exitEmail = group.membership.find((member) => member.email === req.payload.email);
+        if(exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
+        try {
+            const res = await Model.findByIdAndUpdate(req.params.id, {$push: {membership: {
+                fullName: req.payload.fullName,
+                email: req.payload.email,
+                phone: req.payload.phone,
+                timeJoined: moment().unix()
+            }}}, {new: true});
+            return {
+                data: res,
+                message: 'Join the group successfully',
+                messageKey: 'join_group_successfully'
+            };
+        } catch (error) {
+            return error
+        }
+    },
     deleteById: async (req) => {
         const { id } = req.params;
         try {

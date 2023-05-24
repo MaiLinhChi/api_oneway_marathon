@@ -92,6 +92,7 @@ module.exports = [
   },
   
   { method: "POST", path: "/group/authenticate", config: Group.loginGroup },
+  { method: "PUT", path: "/group/join/{id}", config: Group.joinGroup },
   { method: "POST", path: "/group", config: Group.post },
   { method: "GET", path: "/groups", config: Group.get },
   { method: "GET", path: "/group/{id}", config: Group.getById },

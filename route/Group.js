@@ -110,6 +110,23 @@ module.exports = {
       }),
     },
   },
+  joinGroup: {
+    tags: ['api', 'Group'],
+    description: 'Join group by id',
+    handler: (req, res) => {
+      return Response(req, res, "joinGroup");
+    },
+    validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }),
+        payload: Joi.object({
+            fullName: Joi.string().required(),
+            phone: Joi.string().required(),
+            email: Joi.string().required().email(),
+        })
+    }
+  },
   loginGroup: {
     tags: ['api', 'Group'],
     description: 'Authenticate',
