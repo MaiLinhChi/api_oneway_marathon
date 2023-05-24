@@ -133,7 +133,7 @@ module.exports = {
                     const model = new Model(req.payload)
                     model.save().then(async (rs) => {
                         const marathon = await MarathonModel.findOne({_id: rs.marathonId}).lean()
-                        const group = { ...rs._doc, marathonName: marathon.marathonName, marathonId: marathon.marathonId }
+                        const group = { ...rs._doc, marathonName: marathon.name, marathonId: marathon._id }
                         const msg = {
                             to: req.payload.email, // Change to your recipient
                             from: 'admin@onewaymarathon.com', // Change to your verified sender

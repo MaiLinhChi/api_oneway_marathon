@@ -25,15 +25,23 @@ module.exports = {
                                 background: #E6EBF0;
                                 display: flex;
                                 margin-bottom: 4px;
+                                width: 100%;
+                                max-width: 100%;
                             }
                             .text {
                                 margin: 0;
                                 padding: 10px 20px;
                                 color: #1964FF;
                             }
+                            .font-size {
+                                font-size: 14px;
+                                line-height: 20px;
+                            }
                             .instruct {
                                 background: #E6EBF0;
                                 padding: 20px;
+                                max-width: 100%;
+                                width: 100%;
                             }
                             .btn-copy {
                                 margin-left: auto;
@@ -58,6 +66,7 @@ module.exports = {
                                 padding: 12px 30px;
                                 font-weight: 600;
                                 text-decoration: none;
+                                color: white;
                             }
                         </style>
                     </head>
@@ -66,7 +75,7 @@ module.exports = {
                             <img src="https://drive.google.com/uc?export=view&id=1Uj2MW6zHeTtsQ2xNfQDUq5L09Ow2JLei" style="width: 100%; max-width: 768px;">
                             <div class="wrapper-top">
                                 <h1>Tạo nhóm thành công - OneWay Marathon</h1>
-                                <p>
+                                <p class="font-size">
                                     Xin chào ${group.membership[0].fullName}, <br />
                                     Bạn đã khởi tạo nhóm ${group.groupName} tại giải ${group.marathonName}. Link gửi cho các thành viên <br />
                                     khác để cùng đăng ký bạn nhé!
@@ -74,7 +83,7 @@ module.exports = {
                             </div>
                             <div class="wrapper-bottom">
                                 <h2>Tên nhóm: Only tiger</h1>
-                                <table style="width:100%">
+                                <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Họ và tên trưởng nhóm</td>
                                         <td><strong>${group.membership[0].fullName}</strong></td>
@@ -89,11 +98,11 @@ module.exports = {
                                     </tr>
                                 </table>
                                 <h2>Link đăng ký nhóm</h1>
-                                <div class="link-group">
+                                <div class="link-group font-size">
                                     <p class="text">${group.linkJoin}</p>
                                     <button class="btn-copy" onclick="copyText(${group.linkJoin})">Sao chép</button>
                                 </div>
-                                <div class="instruct">
+                                <div class="instruct font-size">
                                     <p>Hướng dẫn: Để đăng ký theo nhóm (từ 2 người) bạn cần làm theo các bước sau:</p>
                                     <ul>
                                         <li>Bước 1: Chia sẻ “link đăng ký nhóm” bên trên cho bạn bè.</li>
