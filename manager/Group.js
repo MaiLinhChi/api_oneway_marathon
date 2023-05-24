@@ -8,6 +8,8 @@ const MarathonModel = require('../model/Marathon')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
+const { sendEmailCreateGroup } = require('../email/create-group');
+const sendgrid = require('../utils/sendgrid');
 
 const generateRandomString = (length) => {
     let result = '';
@@ -129,12 +131,26 @@ module.exports = {
                     req.payload.membership = [owner]
                     req.payload.linkJoin = `${process.env.URL_CLIENT}/${marathon.slug}/${randomString}`
                     const model = new Model(req.payload)
-                    model.save().then(rs => resolve({
-                        message: 'success',
-                        statusCode: 201,
-                        data: rs,
-                        messageKey: 'post_success'
-                    })).catch(e => {
+                    model.save().then(async (rs) => {
+                        const marathon = await MarathonModel.findOne({_id: rs.marathonId}).lean()
+                        const group = { ...rs._doc, marathonName: marathon.marathonName, marathonId: marathon.marathonId }
+                        const msg = {
+                            to: req.payload.email, // Change to your recipient
+                            from: 'admin@onewaymarathon.com', // Change to your verified sender
+                            subject: `Xác nhận tạo nhóm thành công Oneway marathon ${marathon.name}`,
+                            html: sendEmailCreateGroup(group, process.env.URL_CLIENT),
+                        }
+                        const result = await sendgrid.send(msg);
+                        if(result[0].statusCode === 202) {
+                            await rs.updateOne({ sendEmail: true });
+                        }
+                        resolve({
+                            message: 'success',
+                            statusCode: 201,
+                            data: rs,
+                            messageKey: 'post_success'
+                        })
+                    }).catch(e => {
                        resolve({statusCode: 400, message: e.toString()})
                     })
                 }

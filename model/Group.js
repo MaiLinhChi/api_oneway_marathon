@@ -34,6 +34,7 @@ const schema = new Schema({
       timeJoined: Number
    }
  ],
+ sendEmail: { type: Boolean, default: false },
  updatedAt: String,
  updatedBy: String,
  createdAt: String,
