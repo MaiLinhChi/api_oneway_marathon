@@ -15,12 +15,38 @@ module.exports = {
                 id: Joi.string().required(),
             }),
             payload: Joi.object({
-                payment: Joi.object({
-                    gateway: Joi.string(),
-                    bankCode: Joi.string(),
-                    fee: Joi.number()
+                groupId: Joi.string().optional(),
+                email: Joi.string().required(),
+                marathon: Joi.object({
+                    marathonId: Joi.string(),
+                    distance: Joi.number(),
+                    state: Joi.string(),
+                    unit: Joi.string()
                 }),
-                bib: Joi.string().optional(),
+                price: Joi.number().optional(),
+                fullName: Joi.string().optional(),
+                birthday: Joi.string().optional(),
+                gender: Joi.string().valid('male', 'female').optional(),
+                nationality: Joi.string().optional(),
+                passport: Joi.string().optional(),
+                phone: Joi.string().optional(),
+                address: Joi.object({
+                    province: Joi.string(),
+                    district: Joi.string(),
+                    ward: Joi.string(),
+                    street: Joi.string(),
+                }).optional(),
+                emergencyContactName: Joi.string().optional(),
+                emergencyContactPhone: Joi.string().optional(),
+                shirtSize: Joi.string().optional(),
+                nameBib: Joi.string().optional().allow(''),
+                timeEstimation: Joi.string().optional(),
+                vat: Joi.object({
+                    taxCode: Joi.string(),
+                    companyName: Joi.string(),
+                    companyAddress: Joi.string()
+                }).optional(),
+                clubId: Joi.string().optional()
             })
         }
     },
