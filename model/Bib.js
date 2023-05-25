@@ -13,6 +13,7 @@ const schema = new Schema({
    state: String,
    unit: String
  },
+ groupId: String,
  price: Number,
  bib: String,
  fullName: String,
