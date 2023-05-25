@@ -55,7 +55,7 @@ module.exports = [
   { method: "PUT", path: "/marathon/{id}", config: Marathon.putById },
 
   { method: "POST", path: "/bib", config: Bib.post },
-  { method: "GET", path: "/bib", config: Bib.get },
+  { method: "GET", path: "/bibs", config: Bib.get },
   { method: "GET", path: "/bib/{id}", config: Bib.getById },
   { method: "PUT", path: "/bib/{id}", config: Bib.putById },
 
@@ -110,4 +110,11 @@ module.exports = [
   { method: "PUT", path: "/club/{id}", config: Club.update },
   { method: "POST", path: "/club", config: Club.post },
   { method: "DELETE", path: "/club/{id}", config: Club.delete },
+
+  // Order
+  { method: "GET", path: "/orders", config: Club.get },
+  { method: "GET", path: "/order/{id}", config: Club.getById },
+  { method: "PUT", path: "/order/{id}", config: Club.update },
+  { method: "POST", path: "/order", config: Club.post },
+  { method: "DELETE", path: "/order/{id}", config: Club.delete },
 ];
