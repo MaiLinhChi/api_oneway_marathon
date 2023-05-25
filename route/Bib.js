@@ -71,6 +71,7 @@ module.exports = {
         },
         validate: {
             payload: Joi.object({
+                groupId: Joi.string().optional(),
                 email: Joi.string().required(),
                 marathon: Joi.object({
                     marathonId: Joi.string(),
