@@ -10,9 +10,9 @@ const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
 const { paymentBib } = require("../email/bib");
 const Sendgrid = require('../utils/sendgrid');
-const { v4: uuidv4 } = require('uuid');
 const Marathon = require("../model/Marathon");
 const { generateRandomString } = require("./Group");
+const Order = require("../model/Order");
 
 module.exports = {
     getIpn: async (req) => {
@@ -24,11 +24,11 @@ module.exports = {
             const signData = querystring.stringify(query, { encode: false });
             const hmac = crypto.createHmac("sha512", secretKey);
             const signed = hmac.update(signData, "utf-8").digest("hex");
-            const paymentedModel = await BibModel.findOne({ txnRef: req.query.vnp_TxnRef });
+            const paymentedModel = await Order.findOne({ txnRef: req.query.vnp_TxnRef });
             if (!paymentedModel) {
                 return { Message: "Order not found", RspCode: '01' };
             }
-            if (paymentedModel.price !== Number(req.query.vnp_Amount) / 100) {
+            if (paymentedModel.total !== Number(req.query.vnp_Amount) / 100) {
                 return { Message: "Invalid amount", RspCode: '04' };
             }
             if (req.query.vnp_SecureHash !== signed) {
@@ -53,8 +53,9 @@ module.exports = {
             } while (isExitRegisterId);
 
             if(req.query.vnp_TransactionStatus === '00') {
-                const bib = await BibModel.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
-                const marathon = await MarathonModel.findOne({_id: paymentedModel.marathon.marathonId}).lean()
+                const order = await Order.findOneAndUpdate({_id: paymentedModel._id}, { status: "confirmed", registerId }, {new: true});
+                const bib = await BibModel.findOne({_id: order.products[0]}).lean()
+                const marathon = await Marathon.findOne({_id: bib.marathon.marathonId}).lean()
                 bib.marathon.name = marathon.name
                 const msg = {
                     to: paymentedModel.email, // Change to your recipient
