@@ -118,4 +118,5 @@ module.exports = [
   { method: "PUT", path: "/order/{id}", config: Order.updateOrderById },
   { method: "POST", path: "/order", config: Order.postOrder },
   { method: "DELETE", path: "/order/{id}", config: Order.deleteOrderById },
+  { method: "POST", path: "/order/{id}", config: Order.payOrder },
 ];

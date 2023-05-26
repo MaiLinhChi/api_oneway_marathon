@@ -4,6 +4,8 @@
 const { default: mongoose } = require('mongoose');
 const Model = require('../model/Order')
 const BibModel = require('../model/Bib')
+const ip = require('ip');
+const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     deleteOrderById: async (req) => {
@@ -51,6 +53,41 @@ module.exports = {
             }
         } catch (error) {
             return error
+        }
+    },
+    payOrder: async (req) => {
+        const { id } = req.payload
+        try {
+            const order = await Model.findOne({_id: id})
+            if (!order) {
+                return {
+                    message: 'Order not found',
+                    status: false,
+                    statusCode: 404,
+                    messageKey: 'not_found'
+                }
+            }
+            if (order.status === 'comfirmed') return {
+                message: 'you had paid this order',
+                status: false,
+                statusCode: 400,
+                messageKey: 'paid'
+            }
+            const { payment, total } = order
+            const ipAddress = ip.address();
+            const paymentRequest = vnpayPaymentMethod(process.env.AWS_ENV, ((payment.bankCode).toUpperCase()), total, id, ipAddress);
+            order.updateOne({ ref: paymentRequest.vnp_TxnRef, url: paymentRequest.uri });
+            const payUrl = paymentRequest.uri
+            return {
+                message: 'success',
+                status: true,
+                data: payUrl
+            }
+        } catch (error) {
+            return {
+                message: error.message,
+                statusCode: 500
+            }
         }
     },
     getOrders: (req) => {
