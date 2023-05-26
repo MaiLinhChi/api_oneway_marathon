@@ -76,7 +76,7 @@ module.exports = {
             const { payment, total } = order
             const ipAddress = ip.address();
             const paymentRequest = vnpayPaymentMethod(process.env.ENVIROMENT, ((payment.bankCode).toUpperCase()), total, id, ipAddress);
-            order.updateOne({ ref: paymentRequest.vnp_TxnRef, url: paymentRequest.uri });
+            await order.updateOne({ ref: paymentRequest.vnp_TxnRef, url: paymentRequest.uri });
             const payUrl = paymentRequest.uri
             return {
                 message: 'success',
