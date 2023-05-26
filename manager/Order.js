@@ -3,6 +3,7 @@
 
 const { default: mongoose } = require('mongoose');
 const Model = require('../model/Order')
+const BibModel = require('../model/Bib')
 
 module.exports = {
     deleteOrderById: async (req) => {
@@ -32,16 +33,20 @@ module.exports = {
             return error;
         }
     },
-    getOrderById: (req) => {
+    getOrderById: async (req) => {
         const { id } = req.params;
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const order =  Model.findOne({_id: id})
+            const order = await Model.findOne({_id: id});
             if (!order) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
+            const bibs = await BibModel.find({_id : { $in : order.products }});
             return {
                 message: "Get order detail successfully",
                 messageKey: "get_order_detail_successfully",
-                data: order,
+                data: {
+                    order,
+                    bibs
+                },
                 statusCode: 200
             }
         } catch (error) {
