@@ -64,17 +64,17 @@ module.exports = {
         description: 'Add order',
         validate: {
             payload: Joi.object({
-                groupId: Joi.string().required(),
-                products: Joi.array().items(Joi.object({
-                    productId: Joi.string().required(),
-                })).optional(),
-                email: Joi.string().required().email(),
+                products: Joi.array().min(1).items(Joi.object({
+                    productId: Joi.string(),
+                })),
+                email: Joi.string().email(),
+                total: Joi.number(),
+                groupId: Joi.string().optional(),
                 payment: Joi.object({
                     gateway: Joi.string(),
                     bankCode: Joi.string(),
                     fee: Joi.number()
-                }),
-                total: Joi.number().required(),
+                }).optional(),
             })
         },
         handler: (req, res) => {
