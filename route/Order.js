@@ -34,7 +34,7 @@ module.exports = {
         }
     },
     updateOrderById: {
-        tags: ['api', 'Club'],
+        tags: ['api', 'Order'],
         description: 'Update order by id',
         auth: {
             strategy: 'jwt',
