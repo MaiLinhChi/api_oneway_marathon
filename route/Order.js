@@ -49,9 +49,6 @@ module.exports = {
         tags: ['api', 'Order'],
         description: 'Update order by id',
         validate: {
-            headers: Joi.object({
-                authorization: Joi.string().required()
-            }).options({allowUnknown: true}),
             params: Joi.object({
                 id: Joi.string().required()
             }),

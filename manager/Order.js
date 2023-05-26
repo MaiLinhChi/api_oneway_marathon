@@ -19,15 +19,15 @@ module.exports = {
             return error
         }
     },
-    putOrderById: (req) => {
+    putOrderById: async (req) => {
         const { id } = req.params;
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const order = Model.findOneAndUpdate({_id: req.params.id}, req.payload, {new: true});
+            const order = await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
             if (!order) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
             return {
-                message: "Delete order detail successfully",
-                messageKey: "delete_order_detail_successfully",
+                message: "Update order detail successfully",
+                messageKey: "update_order_detail_successfully",
                 data: order,
                 statusCode: 200
             }
@@ -75,7 +75,7 @@ module.exports = {
             }
             const { payment, total } = order
             const ipAddress = ip.address();
-            const paymentRequest = vnpayPaymentMethod(process.env.AWS_ENV, ((payment.bankCode).toUpperCase()), total, id, ipAddress);
+            const paymentRequest = vnpayPaymentMethod(process.env.ENVIROMENT, ((payment.bankCode).toUpperCase()), total, id, ipAddress);
             order.updateOne({ ref: paymentRequest.vnp_TxnRef, url: paymentRequest.uri });
             const payUrl = paymentRequest.uri
             return {
