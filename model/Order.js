@@ -15,6 +15,7 @@ const schema = new Schema({
     fee: Number
  },
  email: String,
+ total: Number,
  sendMailOrder: {type: Boolean, default: false},
  status: {type: String, default: 'pending'},
  url: String,

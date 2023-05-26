@@ -74,6 +74,7 @@ module.exports = {
                     bankCode: Joi.string(),
                     fee: Joi.number()
                 }),
+                total: Joi.number().required(),
             })
         },
         handler: (req, res) => {
