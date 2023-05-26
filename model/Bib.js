@@ -9,12 +9,11 @@ const schema = new Schema({
  marathon: {
    marathonId: String,
    distance: Number,
-   // imageEmail: String,
+   price: Number,
    state: String,
    unit: String
  },
  groupId: String,
- price: Number,
  bibNumber: String,
  fullName: String,
  birthday: String,
