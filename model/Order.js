@@ -17,7 +17,7 @@ const schema = new Schema({
  sendMailOrder: {type: Boolean, default: false},
  status: {type: String, default: 'pending'},
  url: String,
- txnRef: String,
+ ref: String,
  registerId: String,
  updatedAt: String,
  updatedBy: String,
