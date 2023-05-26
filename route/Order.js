@@ -68,6 +68,7 @@ module.exports = {
                 products: Joi.array().items(Joi.object({
                     productId: Joi.string().required(),
                 })).optional(),
+                email: Joi.string().required().email(),
                 payment: Joi.object({
                     gateway: Joi.string(),
                     bankCode: Joi.string(),

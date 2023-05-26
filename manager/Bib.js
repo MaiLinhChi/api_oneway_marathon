@@ -61,9 +61,11 @@ module.exports = {
     },
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(async (item) => {
+
             const marathon = await MarathonModel.findOne({_id: item.marathon.marathonId})
             if(item) {
                 const bib = item._doc
+
                 return {
                     data: {
                         ...bib,

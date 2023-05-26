@@ -14,6 +14,7 @@ const schema = new Schema({
     bankCode: String,
     fee: Number
  },
+ email: String,
  sendMailOrder: {type: Boolean, default: false},
  status: {type: String, default: 'pending'},
  url: String,
@@ -36,4 +37,4 @@ schema.pre("updateOne", function (next) {
  next();
 });
 
-module.exports = mongoose.model('group', schema);
+module.exports = mongoose.model('order', schema);
