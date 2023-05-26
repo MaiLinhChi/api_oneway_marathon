@@ -15,6 +15,18 @@ module.exports = {
             }),
         }
     },
+    payOrder: {
+        tags: ['api', 'Order'],
+        description: 'Pay order',
+        handler: (req, res) => {
+            return Response(req, res, 'payOrder')
+        },
+        validate: {
+            payload: Joi.object({
+                id: Joi.string().required()
+            }),
+        }
+    },
     getOrders: {
         tags: ['api', 'Order'],
         description: 'Get list orders',
@@ -36,10 +48,6 @@ module.exports = {
     updateOrderById: {
         tags: ['api', 'Order'],
         description: 'Update order by id',
-        auth: {
-            strategy: 'jwt',
-            scope: ['admin']
-        },
         validate: {
             headers: Joi.object({
                 authorization: Joi.string().required()
