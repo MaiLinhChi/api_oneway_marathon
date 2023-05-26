@@ -64,9 +64,7 @@ module.exports = {
         description: 'Add order',
         validate: {
             payload: Joi.object({
-                products: Joi.array().min(1).items(Joi.object({
-                    productId: Joi.string(),
-                })),
+                products: Joi.array().min(1),
                 email: Joi.string().email(),
                 total: Joi.number(),
                 groupId: Joi.string().optional(),
