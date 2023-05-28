@@ -36,6 +36,7 @@ module.exports = {
         validate: {
             query: Joi.object({
                 groupId: Joi.string(),
+                email: Joi.string(),
                 txnRef: Joi.string(),
                 registerId: Joi.string(),
                 status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
