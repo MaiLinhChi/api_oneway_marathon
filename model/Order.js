@@ -6,6 +6,7 @@ const moment = require('moment')
 
 const schema = new Schema({
  groupId: String,
+ marathonId: String,
  products: [String],
  payment: {
     gateway: String,
