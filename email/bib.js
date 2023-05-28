@@ -1,7 +1,7 @@
 const moment = require("moment");
 
 module.exports = {
-    paymentBib: (order, url) => {
+    paymentBib: (bib, order, url) => {
         return (
             `
             <!DOCTYPE html>
@@ -31,50 +31,50 @@ module.exports = {
             </head>
             <body>
                 <div class="wrapper">
-                    <img src="https://drive.google.com/uc?export=view&id=1Uj2MW6zHeTtsQ2xNfQDUq5L09Ow2JLei" style="width: 100%;">
+                    <img src=${bib.marathon.imageEmail} style="width: 100%;">
                     <div style="background-color: black; height: 56px; display: flex;">
                         <p style="color: aliceblue; margin: auto;">Mã đăng ký của bạn: ${order.registerId}</span>
                     </div>
                     <div>
-                        <h1 style="text-align: center;">Xác nhận đăng kí thành công -  ${order.marathon.name}</h1>
+                        <h1 style="text-align: center;">Xác nhận đăng kí thành công -  ${bib.marathon.name}</h1>
                         <p style="text-align: center;">
-                            Xin chúc mừng ${order.fullName}, <br />
-                            Bạn đã đăng ký tham gia thành công Giải <b>${order.marathon.name}</b>. <br />
+                            Xin chúc mừng ${bib.fullName}, <br />
+                            Bạn đã đăng ký tham gia thành công Giải <b>${bib.marathon.name}</b>. <br />
                             Để xem và nhận được số BIB của bạn, mời bạn nhấn vào nút bên dưới để tiến hành quay và nhận số BIB.
                         </p>
                         <h1>Thông tin của bạn</h1>
                         <table style="width: 100%;">
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Cự ly</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.marathon.distance} ${order.marathon.unit}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.marathon.distance} ${bib.marathon.unit}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Họ và tên</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.fullName}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.fullName}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Giới tính</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.gender}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.gender}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Ngày sinh</td>
-                                <th style="padding: 10px; display: block; float: right;">${moment(order.birthday).format("DD/MM/YYYY")}</th>
+                                <th style="padding: 10px; display: block; float: right;">${moment(bib.birthday).format("DD/MM/YYYY")}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Số điện thoại</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.phone}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.phone}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Email</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.email}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.email}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">CMT/CCCD/Hộ chiếu</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.passport}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.passport}</th>
                             </tr>
                             <tr>
                                 <td style="padding: 10px; display: inline-block;">Size áo</td>
-                                <th style="padding: 10px; display: block; float: right;">${order.shirtSize}</th>
+                                <th style="padding: 10px; display: block; float: right;">${bib.shirtSize}</th>
                             </tr>
                         </table>
                     </div>
@@ -94,15 +94,15 @@ module.exports = {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Vé ${order.marathon.state} - Cự ly ${order.marathon.distance} ${order.marathon.unit}</td>
+                                    <td>Vé ${bib.marathon.state} - Cự ly ${bib.marathon.distance} ${bib.marathon.unit}</td>
                                     <td>x1</td>
-                                    <td style="float: right;">${order.price}đ</td>
+                                    <td style="float: right;">${bib.marathon.price}đ</td>
                                 </tr>
                             </table>
                             <table style="width:100%; margin-top: 20px;">
                                 <tr>
                                     <td>Thành tiền</td>
-                                    <th style="float: right;">${order.price}đ</th>
+                                    <th style="float: right;">${order.total}đ</th>
                                 </tr>
                             </table>
                         </div>

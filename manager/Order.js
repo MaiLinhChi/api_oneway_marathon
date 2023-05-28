@@ -57,9 +57,11 @@ module.exports = {
     },
     payOrder: async (req) => {
         const { id } = req.payload
+        let validId = true;
+        if (!mongoose.Types.ObjectId.isValid(id)) validId = false;
         try {
             const order = await Model.findOne({_id: id})
-            if (!order) {
+            if (!order || !validId) {
                 return {
                     message: 'Order not found',
                     status: false,
@@ -91,7 +93,7 @@ module.exports = {
         }
     },
     getOrders: (req) => {
-        const {groupId, txnRef, registerId, status, fromDate, toDate} = req.query
+        const {groupId, txnRef, email, registerId, status, fromDate, toDate} = req.query
         const options = {}
         const skip =  req.query.skip || 0
         const limit = req.query.limit || 20
@@ -99,6 +101,7 @@ module.exports = {
 
         if(status) options.status = status
         if(txnRef) options.txnRef = txnRef
+        if(email) options.email = email
         if(registerId) options.registerId = registerId
         if(groupId) options.groupId = { $regex: new RegExp(req.query.groupId), $options: 'i' }
         if(fromDate && toDate) options.startTime = {$gte: fromDate, $lte: toDate}

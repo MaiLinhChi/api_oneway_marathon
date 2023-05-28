@@ -1,63 +1,27 @@
 
 "use strict";
 
+const { default: mongoose } = require('mongoose');
 const Model = require('../model/Bib')
-const PaymentMethodModel = require('../model/PaymentMethod')
 const MarathonModel = require('../model/Marathon')
 const moment = require("moment");
-const {vnpayPaymentMethod} = require("../utils/payment");
 
 module.exports = {
     putById: async (req) => {
-        const { bankCode } = req.payload.payment || {}
         const { id } = req.params
-        const bib = await Model.findOne({_id: id}).lean()
-        if (!bib) return {
-            message: 'bib not found',
-            status: false,
-            statusCode: 400,
-            messageKey: 'bib_not_found'
-        }
-        const { price } = bib
-        if(bankCode) {
-            const comfirmed = await Model.findOne({_id: id});
-            if(comfirmed.status === "comfirmed") {
-                return {
-                    message: "Order already confirmed",
-                    status: 400
-                }
-            }
-            const url = vnpayPaymentMethod('dev', bankCode, price, id, '127.0.0.1');
-            req.payload.txnRef = url.vnp_TxnRef;
-            req.payload.status = "processing";
-            return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
-                return {
-                    data: item,
-                    url,
-                    status: 200
-                }
-            })
-        }
-        if(req.payload.bib) {
-            const order = await Model.findOne({_id: id});
-            if(order.status !== "confirmed") return {status: 400, message: "Please confirmed order"};
-            const isExitBib = await Model.findOne({bib: req.payload.bib});
-            if(isExitBib) return {status: 400, message: "Bib was exit"};
-            return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
-                return {
-                    data: item,
-                    status: 200,
-                    message: "Confinmed bib successfully"
-                }
-            })
-        }
-        return Model.findOneAndUpdate({_id: id}, req.payload, {new: true}).then(item => {
+        try {
+            if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Bib not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
+            const bib = await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
+            if (!bib) return {message: `bib not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
             return {
-                data: item,
-                status: 200,
-                message: "Add order successfully"
+                message: "Update bib detail successfully",
+                messageKey: "update_bib_detail_successfully",
+                data: bib,
+                statusCode: 200
             }
-        })
+        } catch (error) {
+            return error;
+        }
     },
     getById: (req) => {
         return Model.findOne({_id: req.params.id}).then(async (item) => {
