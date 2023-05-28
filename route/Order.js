@@ -36,6 +36,7 @@ module.exports = {
         validate: {
             query: Joi.object({
                 groupId: Joi.string(),
+                marathonId: Joi.string(),
                 email: Joi.string(),
                 txnRef: Joi.string(),
                 registerId: Joi.string(),
@@ -74,6 +75,7 @@ module.exports = {
                 email: Joi.string().email(),
                 total: Joi.number(),
                 groupId: Joi.string().optional(),
+                marathonId: Joi.string(),
                 payment: Joi.object({
                     gateway: Joi.string(),
                     bankCode: Joi.string(),

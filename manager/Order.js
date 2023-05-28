@@ -93,7 +93,7 @@ module.exports = {
         }
     },
     getOrders: (req) => {
-        const {groupId, txnRef, email, registerId, status, fromDate, toDate} = req.query
+        const {groupId, marathonId, txnRef, email, registerId, status, fromDate, toDate} = req.query
         const options = {}
         const skip =  req.query.skip || 0
         const limit = req.query.limit || 20
@@ -104,6 +104,7 @@ module.exports = {
         if(email) options.email = email
         if(registerId) options.registerId = registerId
         if(groupId) options.groupId = { $regex: new RegExp(req.query.groupId), $options: 'i' }
+        if(marathonId) options.marathonId = { $regex: new RegExp(req.query.marathonId), $options: 'i' }
         if(fromDate && toDate) options.startTime = {$gte: fromDate, $lte: toDate}
         
         return Model.find({$and: [options]}).limit(limit).skip(skip * limit).sort({
