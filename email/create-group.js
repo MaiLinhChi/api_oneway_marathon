@@ -115,18 +115,17 @@ module.exports = {
                             </div>
                         </div>
                     </body>
+                    <script>
+                        const copyText = (text) => {
+                            const el = document.createElement('textarea');
+                            el.value = text;
+                            document.body.appendChild(el);
+                            el.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(el);
+                        };
+                    </script>
                 </html>
-                
-                <script>
-                    const copyText = (text) => {
-                        const el = document.createElement('textarea');
-                        el.value = text;
-                        document.body.appendChild(el);
-                        el.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(el);
-                    };
-                </script>
             `
         )
     }

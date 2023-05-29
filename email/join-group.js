@@ -92,7 +92,7 @@ module.exports = {
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Cự ly</td>
-                                        <td colspan="2"><strong>${bib.marathon.distance}</strong></td>
+                                        <td colspan="2"><strong>${bib.marathon.distance}${bib.marathon.unit}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Họ và tên</td>
