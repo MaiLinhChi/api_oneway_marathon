@@ -68,13 +68,7 @@ module.exports = {
         handler: (req, res) => {
             return Response(req, res, 'get');
         },
-        auth: {
-            strategy: 'jwt',
-        },
         validate: {
-            headers: Joi.object({
-                authorization: Joi.string().required()
-            }).options({allowUnknown: true}),
             query: Joi.object({
                 keyword: Joi.string().optional(),
                 email: Joi.string().optional(),
