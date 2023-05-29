@@ -71,7 +71,7 @@ module.exports = {
                                 </p>
                             </div>
                             <div class="wrapper-bottom">
-                                <h2>Tên nhóm: Only tiger</h1>
+                                <h2>Tên nhóm: ${group.nameGroup}</h1>
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Họ và tên trưởng nhóm</td>
