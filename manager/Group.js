@@ -5,11 +5,13 @@ const { hashPassword } = require('../utils/userFunctions');
 const bcrypt = require('bcrypt');
 const Model = require('../model/Group')
 const MarathonModel = require('../model/Marathon')
+const BibModel = require('../model/Bib')
 const MUUID = require('uuid-mongodb')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
 const { sendEmailCreateGroup } = require('../email/create-group');
 const sendgrid = require('../utils/sendgrid');
+const { sendEmailJoinGroup } = require('../email/join-group');
 
 const generateRandomString = (length) => {
     let result = '';
@@ -171,6 +173,14 @@ module.exports = {
                 phone: req.payload.phone,
                 timeJoined: moment().unix()
             }}}, {new: true});
+            const bib = await BibModel.findById(req.payload.bibId);
+            const msg = {
+                to: req.payload.email, // Change to your recipient
+                from: 'admin@onewaymarathon.com', // Change to your verified sender
+                subject: `Tham gia nhóm thành công - OneWay Marathon`,
+                html: sendEmailJoinGroup(group, bib),
+            }
+            await sendgrid.send(msg);
             return {
                 data: res,
                 message: 'Join the group successfully',

@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 module.exports = {
     sendEmailJoinGroup: (group, bib) => {
         return (
@@ -64,8 +66,8 @@ module.exports = {
                             <div class="wrapper-top">
                                 <h1>Tham gia nhóm thành công - OneWay Marathon</h1>
                                 <p class="font-size">
-                                    Xin chào ${group.membership[0].fullName}, <br />
-                                    Bạn đã đăng ký tham gia nhóm {tên nhóm} thành công.
+                                    Xin chào ${bib.fullName}, <br />
+                                    Bạn đã đăng ký tham gia nhóm ${group.nameGroup} thành công.
                                 </p>
                             </div>
                             <div class="wrapper-bottom">
@@ -90,35 +92,35 @@ module.exports = {
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Cự ly</td>
-                                        <td colspan="2"><strong>${group.membership[0].fullName}</strong></td>
+                                        <td colspan="2"><strong>${bib.marathon.distance}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Họ và tên</td>
-                                        <td><strong>${group.membership[0].phone}</strong></td>
+                                        <td><strong>${bib.fullName}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Giới tính</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${bib.gender}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Ngày sinh</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${moment(bib.birthday).format("DD/MM/YYYY")}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Số điện thoại</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${bib.phone}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${bib.email}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>CMT/CCCD/Hộ chiếu</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${bib.passport}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Size áo</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${bib.shirtSize}</strong></td>
                                     </tr>
                                 </table>
                             </div>
