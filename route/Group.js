@@ -124,6 +124,7 @@ module.exports = {
             fullName: Joi.string().required(),
             phone: Joi.string().required(),
             email: Joi.string().required().email(),
+            bibId: Joi.string().required(),
         })
     }
   },
