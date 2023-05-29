@@ -92,7 +92,7 @@ module.exports = {
             }
         }
     },
-    getOrders: (req) => {
+    getOrders: async (req) => {
         const {groupId, marathonId, txnRef, email, registerId, status, fromDate, toDate} = req.query
         const options = {}
         const skip =  req.query.skip || 0
@@ -123,7 +123,7 @@ module.exports = {
         //     }
         // })
 
-        return Model.aggregate([
+        const res = await Model.aggregate([
             {$match: {$and: [options]}},
             {$skip: skip * limit},
             {$limit: limit},
@@ -150,6 +150,17 @@ module.exports = {
                 "createdAt": { "$first": "$createdAt" },
             }},
         ])
+
+        const totalRecord = await Model.countDocuments(options)
+            
+            return {
+                data: res,
+                status: 200,
+                message: "Get list orders successfully",
+                messageKey: "get_list_orders_successfully",
+                totalRecord,
+                totalPage: Math.ceil(totalRecord / limit),
+            }
     },
     postOrder: (req) => {
         const model = new Model(req.payload)
