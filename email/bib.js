@@ -40,7 +40,6 @@ module.exports = {
                         <p style="text-align: center;">
                             Xin chúc mừng ${bib.fullName}, <br />
                             Bạn đã đăng ký tham gia thành công Giải <b>${bib.marathon.name}</b>. <br />
-                            Để xem và nhận được số BIB của bạn, mời bạn nhấn vào nút bên dưới để tiến hành quay và nhận số BIB.
                         </p>
                         <h1>Thông tin của bạn</h1>
                         <table style="width: 100%;">
