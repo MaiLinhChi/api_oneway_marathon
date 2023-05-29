@@ -67,11 +67,11 @@ module.exports = {
                                 <h1>Tham gia nhóm thành công - OneWay Marathon</h1>
                                 <p class="font-size">
                                     Xin chào ${bib.fullName}, <br />
-                                    Bạn đã đăng ký tham gia nhóm ${group.nameGroup} thành công.
+                                    Bạn đã đăng ký tham gia nhóm ${group.groupName} thành công.
                                 </p>
                             </div>
                             <div class="wrapper-bottom">
-                                <h2>Tên nhóm: ${group.nameGroup}</h1>
+                                <h2>Tên nhóm: ${group.groupName}</h1>
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Họ và tên trưởng nhóm</td>
