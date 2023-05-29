@@ -73,6 +73,7 @@ module.exports = {
                 keyword: Joi.string().optional(),
                 email: Joi.string().optional(),
                 marathon: Joi.string().optional(),
+                groupId: Joi.string().optional(),
                 status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
                 fromDate: Joi.string().optional(),
                 toDate: Joi.string().optional(),
