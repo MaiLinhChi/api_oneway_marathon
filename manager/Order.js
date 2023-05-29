@@ -97,7 +97,8 @@ module.exports = {
         const options = {}
         const skip =  req.query.skip || 0
         const limit = req.query.limit || 20
-        const sort = req.query.sort || 'desc'
+        // const sort = req.query.sort || 'desc'
+        const sort = req.query.sort || -1
 
         if(status) options.status = status
         if(txnRef) options.txnRef = txnRef
@@ -107,20 +108,48 @@ module.exports = {
         if(marathonId) options.marathonId = { $regex: new RegExp(req.query.marathonId), $options: 'i' }
         if(fromDate && toDate) options.startTime = {$gte: fromDate, $lte: toDate}
         
-        return Model.find({$and: [options]}).limit(limit).skip(skip * limit).sort({
-            createdAt: sort
-        }).then(async rs => {
-            const totalRecord = await Model.countDocuments(options)
+        // return Model.find({$and: [options]}).limit(limit).skip(skip * limit).sort({
+        //     createdAt: sort
+        // }).then(async rs => {
+        //     const totalRecord = await Model.countDocuments(options)
             
-            return {
-                data: rs,
-                status: 200,
-                message: "Get list orders successfully",
-                messageKey: "get_list_orders_successfully",
-                totalRecord,
-                totalPage: Math.ceil(totalRecord / limit),
-            }
-        })
+        //     return {
+        //         data: rs,
+        //         status: 200,
+        //         message: "Get list orders successfully",
+        //         messageKey: "get_list_orders_successfully",
+        //         totalRecord,
+        //         totalPage: Math.ceil(totalRecord / limit),
+        //     }
+        // })
+
+        return Model.aggregate([
+            {$match: {$and: [options]}},
+            {$skip: skip * limit},
+            {$limit: limit},
+            {$sort: {createdAt: sort}},
+            { "$unwind": "$products" },
+            {$addFields: {"idSearch": {"$toObjectId": "$products"}}},
+            {$lookup: {
+                from: 'bibs',
+                foreignField: '_id',
+                localField: 'idSearch',
+                "as": "productObjects"
+            }},
+            { "$unwind": "$productObjects" },
+            { "$group": {
+                "_id": "$_id",
+                "products": { "$push": "$productObjects" },
+                "email": { "$first": "$email" },
+                "total": { "$first": "$total" },
+                "sendMailOrder": { "$first": "$sendMailOrder" },
+                "status": { "$first": "$status" },
+                "url": { "$first": "$url" },
+                "ref": { "$first": "$ref" },
+                "registerId": { "$first": "$registerId" },
+                "createdAt": { "$first": "$createdAt" },
+            }},
+        ])
     },
     postOrder: (req) => {
         const model = new Model(req.payload)
