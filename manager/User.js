@@ -143,7 +143,14 @@ module.exports = {
     },
     post: async (req) => {
         const isDupEmail = await Model.exists({email: req.payload.email});
-        const isDupUsername = await Model.exists({username: req.payload.username});
+        let isDupUsername = false;
+        if (req.payload.username) {
+            console.log(req.payload.username)
+            const isExit = await Model.exists({username: req.payload.username});
+            if (isExit) {
+                isDupUsername = true
+            }
+        }
         if(isDupEmail) return {statusCode: 400, message: 'email is existed!', messageKey: 'email_exist'};
         if(isDupUsername) return {statusCode: 400, message: 'username is existed!', messageKey: 'username_exist'};
         return new Promise(resolve => {
