@@ -77,10 +77,10 @@ module.exports = {
         validate: {
             payload: Joi.object({
                 email: Joi.string().required().email(),
-                username: Joi.string().min(8),
+                username: Joi.string().min(8).optional(),
                 password: Joi.string().min(8).required(),
-                fullname: Joi.string(),
-                mobile: Joi.string().required(),
+                fullname: Joi.string().optional(),
+                mobile: Joi.string().optional(),
                 avatar: Joi.string().optional(),
             })
         }
