@@ -45,7 +45,7 @@ const verifyCredentialsAdmin = (req, res) => {
 }
 const verifyCredentials = (req, res) => {
     const { username, password } = req.payload;
-    if (username !== '') return {statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'}
+    if (username === '') return {statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'}
     return Model.findOne({ $or: [{username: username}, {email: username, role: 'user'}]}).then(user => {
         // console.log(user)
         if (user) {
