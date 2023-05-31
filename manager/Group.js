@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt');
 const Model = require('../model/Group')
 const MarathonModel = require('../model/Marathon')
 const BibModel = require('../model/Bib')
+const UsersModel = require('../model/User')
 const MUUID = require('uuid-mongodb')
+const uuid = require('uuid')
 const moment = require("moment");
 const { default: mongoose } = require('mongoose');
 const { sendEmailCreateGroup } = require('../email/create-group');
@@ -233,6 +235,37 @@ module.exports = {
             return {statusCode: 400, message: e.toString()}
         })
     },
+    removeMember: async (req) => {
+        const { id } = req.params
+        const { email } = req.payload
+        try {
+            const emailToken= req.auth.credentials.user.email                                                                            
+            const user = await UsersModel.findOne({email: emailToken})
+            if (!user) return {statusCode: 404, message: 'user does not exist', messageKey: 'user_not_found'}
+            const group = await Model.findById(id)
+            if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
+            const leader = group.membership.find(m => m.role === 'leader')
+            if (leader.email !== emailToken || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            const isUserExist = group.membership.find(m => m.email === email)
+            if (!isUserExist) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
+            await group.updateOne({
+                $pull: {membership: {email}}
+            })
+            await Promise.all([
+                group.updateOne({
+                    $pull: {membership: {email}}
+                }),
+                BibModel.deleteMany({
+                    email,
+                    groupId: id
+                })
+            ])
+            // if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
+            return {message: 'success', messageKey: 'success', status: 200}
+        } catch (error) {
+            return error
+        }
+    }
 }
 
 

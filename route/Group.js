@@ -141,4 +141,25 @@ module.exports = {
         })
     }
   },
+  removeMember: {
+    tags: ['api', 'Group'],
+    description: 'remove a member from a group',
+    auth: {
+      strategy: 'jwt',
+    },
+    handler: (req, res) => {
+      return Response(req, res, "removeMember");
+    },
+    validate: {
+      headers: Joi.object({
+        authorization: Joi.string().required()
+      }).options({allowUnknown: true}),
+      params: Joi.object({
+        id: Joi.string().required()
+      }),
+      payload: Joi.object({
+          email: Joi.string().required()
+      })
+    }
+  },
 };
