@@ -88,7 +88,7 @@ module.exports = {
             }
         })
     },
-    post: (req) => {
+    post: async (req) => {
         // const bib = await Model.find({marathon: req.payload.marathon});
         // const isHaving = bib.find((item) => item.email === req.payload.email || item.phone === req.payload.phone || item.passport === req.payload.passport);
         // if(isHaving && isHaving.email === req.payload.email) {
@@ -98,6 +98,10 @@ module.exports = {
         // } else if(isHaving && isHaving.passport === req.payload.passport) {
         //     return {statusCode: 400, message: 'Passport is existed !', errorCode: 'PASSPORT_EXISTED'};
         // }
+        const {_id} = req.payload
+        if (_id) {
+            await Model.findByIdAndDelete(_id)
+        }
         const model = new Model(req.payload)
         return new Promise(resolve => {
             model.save().then((obj) => resolve({status: 200, message: "Register suscess", data: obj})).catch(e => {

@@ -120,8 +120,6 @@ module.exports = {
         if(fromDate || toDate) options.CreatedOn = {}
         if(fromDate) options.CreatedOn.$gte =  new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY"))
         if(toDate) options.CreatedOn.$lte =  new Date(moment(toDate, 'DD/MM/YYYY').format("MM/DD/YYYY"))
-        console.log(new Date(moment(fromDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
-        console.log(new Date(moment(toDate,'DD/MM/YYYY').format("MM/DD/YYYY")))
         
         return Model.find({$and: [options, keywordCondition]}).limit(limit).skip(skip * limit).sort({
             CreatedOn: sort
@@ -145,7 +143,6 @@ module.exports = {
         const isDupEmail = await Model.exists({email: req.payload.email});
         let isDupUsername = false;
         if (req.payload.username) {
-            console.log(req.payload.username)
             const isExit = await Model.exists({username: req.payload.username});
             if (isExit) {
                 isDupUsername = true
