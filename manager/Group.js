@@ -244,8 +244,8 @@ module.exports = {
             if (!user) return {statusCode: 404, message: 'user does not exist', messageKey: 'user_not_found'}
             const group = await Model.findById(id)
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
-            const leader = group.membership.find(m => m.role === 'leader')
-            if (leader.email !== emailToken || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            const leader = group.membership.find(m => m.role === 'leader' && m.email === emailToken)
+            if (!leader || leader.email !== emailToken || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
             const isUserExist = group.membership.find(m => m.email === email)
             if (!isUserExist) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             await group.updateOne({
