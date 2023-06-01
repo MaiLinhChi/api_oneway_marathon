@@ -31,7 +31,17 @@ const generateRandomString = (length) => {
 module.exports = {
     generateRandomString,
     getById: (req) => {
-        return Model.findOne({_id: req.params.id}).select('-password -__v -createdAt').lean().then(async data => {
+        const { id } = req.params
+        let keyQuery = "_id"
+        const isBSon = mongoose.Types.ObjectId.isValid(id)
+        if (!isBSon) keyQuery = "groupCode"
+        return Model.findOne({[keyQuery]: id}).select('-password -__v -createdAt').lean().then(async data => {
+            if (!data) return {
+                message: 'Grounp does not exist',
+                messageKey: 'group_not_found',
+                status: false,
+                statusCode: 404
+            }
             const marathon = await MarathonModel.findOne({_id: data.marathonId})
             if (!marathon) return {
                 message: 'marathon does not existed',
@@ -44,7 +54,9 @@ module.exports = {
                 startTime: marathon.startTime
             }
             return {
-                res
+                message: 'success',
+                status: false,
+                data: res
             }
         })
     },
@@ -195,17 +207,20 @@ module.exports = {
     deleteById: async (req) => {
         const { id } = req.params;
         try {
+        const leaderEmail = req.auth.credentials.user.email                                                                     
         if (!mongoose.Types.ObjectId.isValid(id))
-            return { message: `No brand with id: ${id}`, statusCode: 404 };
+            return { message: `No group with id: ${id}`, statusCode: 404 };
         const group = await Model.findByIdAndDelete({ _id: id });
         if (!group)
             return {
-            message: "Not found brand",
+            message: "Not found group",
             status: false,
             statusCode: 404,
-            messageKey: "brand_not_found",
+            messageKey: "group_not_found",
             data: group,
             };
+        const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
+        if (!leader) return {message: 'You can not delete this group', statusCode: 403, messageKey: 'not_permission'}
         return {
             message: "Delete group success",
             data: group,
@@ -239,13 +254,13 @@ module.exports = {
         const { id } = req.params
         const { email } = req.payload
         try {
-            const emailToken= req.auth.credentials.user.email                                                                            
-            const user = await UsersModel.findOne({email: emailToken})
+            const leaderEmail = req.auth.credentials.user.email                                                                     
+            const user = await UsersModel.findOne({email: leaderEmail})
             if (!user) return {statusCode: 404, message: 'user does not exist', messageKey: 'user_not_found'}
             const group = await Model.findById(id)
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
-            const leader = group.membership.find(m => m.role === 'leader' && m.email === emailToken)
-            if (!leader || leader.email !== emailToken || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
+            if (!leader || leader.email !== leaderEmail || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
             const removedUser = group.membership.find(m => m.email === email)
             if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             // const bib = await BibModel.findById(req.payload.bibId);
