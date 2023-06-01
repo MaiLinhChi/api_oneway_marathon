@@ -14,7 +14,7 @@ const { default: mongoose } = require('mongoose');
 const { sendEmailCreateGroup } = require('../email/create-group');
 const sendgrid = require('../utils/sendgrid');
 const { sendEmailJoinGroup } = require('../email/join-group');
-const { sendEmailRemoveMember } = require('../email')
+const { sendEmailRemoveMember, sendEmailDeleteGroup } = require('../email')
 const generateRandomString = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -221,13 +221,26 @@ module.exports = {
             };
         const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
         if (!leader) return {message: 'You can not delete this group', statusCode: 403, messageKey: 'not_permission'}
+        const messages = group.membership.map(member => {
+            return  {
+                to: member.email, // Change to your recipient
+                from: 'admin@onewaymarathon.com', // Change to your verified sender
+                subject: `Thông báo nhóm đã bị xóa - OneWay Marathon`,
+                html: sendEmailDeleteGroup(group, member, leader),
+            }
+        })
+        try {
+            await Promise.all(messages.map(msg => sendgrid.send(msg)))
+        } catch (error) {
+            console.log(error)
+        }
         return {
             message: "Delete group success",
             data: group,
             status: 200,
         };
         } catch (error) {
-        return error;
+            return error;
         }
     },
     loginGroup: (req) => {
