@@ -98,6 +98,7 @@ module.exports = [
   { method: "GET", path: "/groups", config: Group.get },
   { method: "GET", path: "/group/{id}", config: Group.getById },
   { method: "DELETE", path: "/group/{id}", config: Group.deleteById },
+  { method: "PUT", path: "/group/remove/{id}", config: Group.removeMember },
 
   // Province Distric Ward
   { method: "GET", path: "/province", config: Province.get },
