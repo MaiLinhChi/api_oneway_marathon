@@ -14,7 +14,7 @@ const { default: mongoose } = require('mongoose');
 const { sendEmailCreateGroup } = require('../email/create-group');
 const sendgrid = require('../utils/sendgrid');
 const { sendEmailJoinGroup } = require('../email/join-group');
-
+const { sendEmailRemoveMember } = require('../email')
 const generateRandomString = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -246,11 +246,15 @@ module.exports = {
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
             const leader = group.membership.find(m => m.role === 'leader' && m.email === emailToken)
             if (!leader || leader.email !== emailToken || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
-            const isUserExist = group.membership.find(m => m.email === email)
-            if (!isUserExist) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
-            await group.updateOne({
-                $pull: {membership: {email}}
-            })
+            const removedUser = group.membership.find(m => m.email === email)
+            if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
+            // const bib = await BibModel.findById(req.payload.bibId);
+            const msg = {
+                to: email, // Change to your recipient
+                from: 'admin@onewaymarathon.com', // Change to your verified sender
+                subject: `Thông báo thành viên bị xóa khỏi nhóm - OneWay Marathon`,
+                html: sendEmailRemoveMember(group, removedUser, leader),
+            }
             await Promise.all([
                 group.updateOne({
                     $pull: {membership: {email}}
@@ -260,6 +264,7 @@ module.exports = {
                     groupId: id
                 })
             ])
+            await sendgrid.send(msg);
             // if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
             return {message: 'success', messageKey: 'success', status: 200}
         } catch (error) {
