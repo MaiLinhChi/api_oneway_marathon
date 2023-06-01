@@ -207,7 +207,7 @@ module.exports = {
     deleteById: async (req) => {
         const { id } = req.params;
         try {
-        const leaderEmail = req.auth.credentials.user.email                                                                     
+        const leaderEmail = req.auth.credentials.user.email
         if (!mongoose.Types.ObjectId.isValid(id))
             return { message: `No group with id: ${id}`, statusCode: 404 };
         const group = await Model.findByIdAndDelete({ _id: id });
@@ -260,7 +260,8 @@ module.exports = {
             const group = await Model.findById(id)
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
             const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
-            if (!leader || leader.email !== leaderEmail || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            if (!leader || leader.email !== leaderEmail) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            if (leader.email === email) return {message: 'You can not remove yourself', messageKey: 'not_remove_yourself', statusCode: 403}
             const removedUser = group.membership.find(m => m.email === email)
             if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             // const bib = await BibModel.findById(req.payload.bibId);
