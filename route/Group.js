@@ -104,7 +104,13 @@ module.exports = {
     handler: (req, res) => {
       return Response(req, res, "deleteById");
     },
+    auth: {
+      strategy: 'jwt',
+    },
     validate: {
+      headers: Joi.object({
+        authorization: Joi.string().required()
+      }).options({allowUnknown: true}),
       params: Joi.object({
         id: Joi.string().required(),
       }),

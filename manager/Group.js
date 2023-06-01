@@ -14,7 +14,7 @@ const { default: mongoose } = require('mongoose');
 const { sendEmailCreateGroup } = require('../email/create-group');
 const sendgrid = require('../utils/sendgrid');
 const { sendEmailJoinGroup } = require('../email/join-group');
-const { sendEmailRemoveMember } = require('../email')
+const { sendEmailRemoveMember, sendEmailDeleteGroup } = require('../email')
 const generateRandomString = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -207,7 +207,7 @@ module.exports = {
     deleteById: async (req) => {
         const { id } = req.params;
         try {
-        const leaderEmail = req.auth.credentials.user.email                                                                     
+        const leaderEmail = req.auth.credentials.user.email
         if (!mongoose.Types.ObjectId.isValid(id))
             return { message: `No group with id: ${id}`, statusCode: 404 };
         const group = await Model.findByIdAndDelete({ _id: id });
@@ -221,13 +221,26 @@ module.exports = {
             };
         const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
         if (!leader) return {message: 'You can not delete this group', statusCode: 403, messageKey: 'not_permission'}
+        const messages = group.membership.map(member => {
+            return  {
+                to: member.email, // Change to your recipient
+                from: 'admin@onewaymarathon.com', // Change to your verified sender
+                subject: `Thông báo nhóm đã bị xóa - OneWay Marathon`,
+                html: sendEmailDeleteGroup(group, member, leader),
+            }
+        })
+        try {
+            await Promise.all(messages.map(msg => sendgrid.send(msg)))
+        } catch (error) {
+            console.log(error)
+        }
         return {
             message: "Delete group success",
             data: group,
             status: 200,
         };
         } catch (error) {
-        return error;
+            return error;
         }
     },
     loginGroup: (req) => {
@@ -260,7 +273,8 @@ module.exports = {
             const group = await Model.findById(id)
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
             const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
-            if (!leader || leader.email !== leaderEmail || leader.email === email) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            if (!leader || leader.email !== leaderEmail) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            if (leader.email === email) return {message: 'You can not remove yourself', messageKey: 'not_remove_yourself', statusCode: 403}
             const removedUser = group.membership.find(m => m.email === email)
             if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             // const bib = await BibModel.findById(req.payload.bibId);

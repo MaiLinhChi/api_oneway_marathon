@@ -4,6 +4,7 @@
 const { default: mongoose } = require('mongoose');
 const Model = require('../model/Order')
 const BibModel = require('../model/Bib')
+const GroupModel = require('../model/Group')
 const ip = require('ip');
 const {vnpayPaymentMethod} = require("../utils/payment");
 
@@ -93,21 +94,26 @@ module.exports = {
         }
     },
     getOrders: async (req) => {
-        const {groupId, marathonId, txnRef, email, registerId, status, fromDate, toDate} = req.query
+        const {groupId, marathonId, txnRef, email, registerId, status, fromDate, toDate, type} = req.query
         const options = {}
         const skip =  req.query.skip || 0
         const limit = req.query.limit || 20
         // const sort = req.query.sort || 'desc'
         const sort = req.query.sort || -1
-
+        if (type) {
+            if (type === 'group') {
+                options.groupId = {$exists: true}
+            } else {
+                options.groupId = {$exists: false}
+            }
+        }
         if(status) options.status = status
         if(txnRef) options.txnRef = txnRef
         if(email) options.email = email
         if(registerId) options.registerId = registerId
-        if(groupId) options.groupId = { $regex: new RegExp(req.query.groupId), $options: 'i' }
-        if(marathonId) options.marathonId = { $regex: new RegExp(req.query.marathonId), $options: 'i' }
+        if(groupId) options.groupId = groupId
+        if(marathonId) options.marathonId = marathonId
         if(fromDate && toDate) options.startTime = {$gte: fromDate, $lte: toDate}
-        
         // return Model.find({$and: [options]}).limit(limit).skip(skip * limit).sort({
         //     createdAt: sort
         // }).then(async rs => {
@@ -162,7 +168,28 @@ module.exports = {
                 totalPage: Math.ceil(totalRecord / limit),
             }
     },
-    postOrder: (req) => {
+    postOrder: async (req) => {
+        const { groupId } = req.payload
+        if (groupId) {
+            const leaderEmail = req.auth.credentials.user.email
+            if (!mongoose.Types.ObjectId.isValid(groupId)) return {
+                message: 'group not found',
+                messageKey: 'group_not_found',
+                statusCode: 404,
+            }
+            const group = await GroupModel.findById(groupId)
+            if (!group) return {
+                message: 'group not found',
+                messageKey: 'group_not_found',
+                statusCode: 404,
+            }
+            const leader = group.membership.find(e => e.email === leaderEmail && e.role === 'leader')
+            if (!leader) return {
+                message: "You're not leader of this group",
+                messageKey: 'not_permission',
+                statusCode: 403,
+            }
+        }
         const model = new Model(req.payload)
         return new Promise(resolve => {
             model.save().then((obj) => resolve({statusCode: 200, data: obj, message: "Order suscessfully", messageKey: "order_suscessfully"})).catch(e => {

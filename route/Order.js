@@ -43,7 +43,9 @@ module.exports = {
                 status: Joi.string().valid('pending', 'processing', 'confirmed').optional(),
                 pageSize: Joi.number().default(20),
                 pageIndex: Joi.number().default(1),
-                sort: Joi.number().valid('desc', 'asc')
+                sort: Joi.number().valid('desc', 'asc'),
+                type: Joi.string().valid('group', 'individual')
+
             })
         }
     },
