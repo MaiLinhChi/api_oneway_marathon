@@ -57,11 +57,16 @@ module.exports = {
                 id: Joi.string().required()
             }),
             payload: Joi.object({
+                products: Joi.array().min(1).optional(),
+                email: Joi.string().email().optional(),
+                total: Joi.number().optional(),
+                groupId: Joi.string().optional(),
+                marathonId: Joi.string().optional(),
                 payment: Joi.object({
                     gateway: Joi.string(),
                     bankCode: Joi.string(),
                     fee: Joi.number()
-                }),
+                }).optional(),
             })
         },
         handler: (req, res) => {
