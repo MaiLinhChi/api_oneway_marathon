@@ -28,11 +28,11 @@ module.exports = {
                 }
                 await sendgrid.send(msg)
             }
-            await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
+            const data = await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
             return {
                 message: "Update bib detail successfully",
                 messageKey: "update_bib_detail_successfully",
-                data: bib,
+                data,
                 statusCode: 200
             }
         } catch (error) {
