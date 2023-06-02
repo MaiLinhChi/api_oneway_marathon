@@ -169,9 +169,8 @@ module.exports = {
             }
     },
     postOrder: async (req) => {
-        const { groupId } = req.payload
+        const { groupId, email } = req.payload
         if (groupId) {
-            const leaderEmail = req.auth.credentials.user.email
             if (!mongoose.Types.ObjectId.isValid(groupId)) return {
                 message: 'group not found',
                 messageKey: 'group_not_found',
@@ -183,7 +182,7 @@ module.exports = {
                 messageKey: 'group_not_found',
                 statusCode: 404,
             }
-            const leader = group.membership.find(e => e.email === leaderEmail && e.role === 'leader')
+            const leader = group.membership.find(e => e.email === email && e.role === 'leader')
             if (!leader) return {
                 message: "You're not leader of this group",
                 messageKey: 'not_permission',
