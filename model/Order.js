@@ -5,7 +5,10 @@ const Schema    = mongoose.Schema;
 const moment = require('moment')
 
 const schema = new Schema({
- groupId: String,
+ groupId: {
+   type: String,
+   ref: "groups"
+ },
  marathonId: String,
  products: [String],
  payment: {
@@ -37,4 +40,5 @@ schema.pre("updateOne", function (next) {
  next();
 });
 
+schema.index({groupId: 1});
 module.exports = mongoose.model('order', schema);

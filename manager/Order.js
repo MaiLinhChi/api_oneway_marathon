@@ -40,16 +40,23 @@ module.exports = {
         const { id } = req.params;
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const order = await Model.findOne({_id: id});
+            const order = await Model.findOne({_id: id}).lean();
             if (!order) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
             const bibs = await BibModel.find({_id : { $in : order.products }});
+            const data = {
+                order,
+                bibs,
+            }
+            const { groupId } = order
+            if (groupId) {
+                const group = await GroupModel.findById(groupId)
+                if (!order) return {message: `group not exist with id: ${groupId}`, messageKey: `group_not_found`, statusCode: 404};
+                data.groupName = group.groupName
+            }
             return {
                 message: "Get order detail successfully",
                 messageKey: "get_order_detail_successfully",
-                data: {
-                    order,
-                    bibs
-                },
+                data,
                 statusCode: 200
             }
         } catch (error) {
