@@ -14,7 +14,7 @@ module.exports = {
         const { groupId } = req.payload
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Bib not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const bib = await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
+            const bib = await Model.findOne({_id: id});
             if (!bib) return {message: `bib not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
             if (groupId) {
                 if (!mongoose.Types.ObjectId.isValid(groupId)) return {message: `Bib not exist with id: ${id}`, messageKey: `group_not_found`, statusCode: 404};
@@ -28,6 +28,7 @@ module.exports = {
                 }
                 await sendgrid.send(msg)
             }
+            await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
             return {
                 message: "Update bib detail successfully",
                 messageKey: "update_bib_detail_successfully",
