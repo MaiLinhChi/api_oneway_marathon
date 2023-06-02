@@ -51,7 +51,7 @@ module.exports = {
             if (groupId) {
                 const group = await GroupModel.findById(groupId)
                 if (!order) return {message: `group not exist with id: ${groupId}`, messageKey: `group_not_found`, statusCode: 404};
-                data.groupName = group.groupName
+                data.group = group
             }
             return {
                 message: "Get order detail successfully",
