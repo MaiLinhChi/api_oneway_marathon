@@ -57,21 +57,8 @@ module.exports = {
     post: (req) => {
         const slug = pharse2Slug(req.payload.name)
         const model = new Model({
-            name: req.payload.name,
-            image: req.payload.image,
+            ...req.payload,
             slug,
-            imageEmail: req.payload.imageEmail,
-            description: req.payload.description,
-            startTime: req.payload.startTime,
-            type: req.payload.type,
-            location: req.payload.location,
-            race: req.payload.race,
-            priceList: req.payload.priceList,
-            registerGroup: req.payload.registerGroup,
-            raceKit: req.payload.raceKit,
-            service: req.payload.service,
-            schedule: req.payload.schedule,
-            regulation: req.payload.regulation,
         })
         return model.save()
     },
