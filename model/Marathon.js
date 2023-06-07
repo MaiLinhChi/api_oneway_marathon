@@ -20,6 +20,8 @@ const schema = new Schema({
     imageEmail: String,
     status: {type: String, default: 'pending'},
     unitRace: String,
+    type: String,
+    location: String,
     race: [{
         routeMap: String,
         image: String,
@@ -62,9 +64,7 @@ const schema = new Schema({
         title: String,
         description: String,
     }],
-    location: String,
     slug: String,
-    type: String,
     updatedAt: String,
     updatedBy: String,
     createdAt: String,

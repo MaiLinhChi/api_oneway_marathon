@@ -147,10 +147,10 @@ module.exports = {
                 startTime: Joi.string().required(),
                 location: Joi.string().required(),
                 type: Joi.string().default('Road/City trail').required(),
+                unitRace: Joi.string().required(),
                 race: Joi.array().min(1).items(Joi.object({
                     image: Joi.string().required(),
                     distance: Joi.number().required().description('race track length in kilomets'),
-                    unit: Joi.string().required(),
                     routeMap: Joi.string().required().description('image router map'),
                     award: Joi.object({
                         male: Joi.number().min(1000).required().description('award on vnd'),
@@ -191,7 +191,6 @@ module.exports = {
                 regulation: Joi.array().min(1).items(Joi.object({
                     title: Joi.string().required(),
                     description: Joi.string().required(),
-                    _id: Joi.string().optional(),
                 })).required(),
             }),
             headers: Joi.object({
