@@ -7,6 +7,7 @@ const Model = require('../model/Group')
 const MarathonModel = require('../model/Marathon')
 const BibModel = require('../model/Bib')
 const UsersModel = require('../model/User')
+const OrderModel = require('../model/Order')
 const MUUID = require('uuid-mongodb')
 const uuid = require('uuid')
 const moment = require("moment");
@@ -243,10 +244,18 @@ module.exports = {
             return error;
         }
     },
-    loginGroup: (req) => {
+    loginGroup: async (req) => {
         const { password, _id } = req.payload;
-        return Model.findOne({_id: _id}).then(group => {
+        let invalidGroup;
+        if (!mongoose.Types.ObjectId.isValid(_id)) invalidGroup = true
+        const isPayment = await OrderModel.findOne({groupId: _id, status: "confirmed"})
+        if (isPayment) invalidGroup = true
+        if (invalidGroup) return {statusCode: 400, message: 'Invalid group!', messageKey: 'invalid_group'}
+        return Model.findOne({_id: _id}).then(async (group) => {
             if (!group) return {statusCode: 400, message: 'Invalid credentials!', messageKey: 'invalid_credentials'}
+            const marathon = await MarathonModel.findOne({_id: group.marathonId});
+            const today = new Date();
+            if (new Date(marathon.startTime).getTime() < today.getTime()) return {statusCode: 400, message: 'Registration expires!', messageKey: 'registration_expires'}
             return new Promise(resolve => {
                 bcrypt.compare(password, group.password, (err, isValid) => {
                     if (err) return {statusCode: 400, message: 'Incorrect Password!'};
