@@ -80,8 +80,8 @@ const sortObject = (obj) => {
 
 const vnpayPaymentMethod = (env, method, amount, code, ip) => {
     const vnpayUrl = {
-        pro: 'https://vnpayment.vn',
-        dev: 'https://sandbox.vnpayment.vn'
+        prod: 'https://pay.vnpay.vn/vpcpay.html?',
+        dev: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?'
     }
     const secretKey = process.env.VNPAY_SECRET_KEY
     let vnp_Params = {
@@ -105,7 +105,7 @@ const vnpayPaymentMethod = (env, method, amount, code, ip) => {
     const signed = hmac.update(signData, 'utf-8').digest("hex")
     vnp_Params.vnp_SecureHash = signed
     const opts = {
-        uri:  vnpayUrl[env]+'/paymentv2/vpcpay.html?' + querystring.stringify(vnp_Params, { encode: false }),
+        uri:  vnpayUrl[env] + querystring.stringify(vnp_Params, { encode: false }),
         vnp_TxnRef: vnp_Params.vnp_TxnRef
     }
     // console.log(opts)
