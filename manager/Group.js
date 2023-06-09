@@ -43,6 +43,8 @@ module.exports = {
                 status: false,
                 statusCode: 404
             }
+            const order = await OrderModel.findOne({groupId: data._id})
+            if (order) return {statusCode: 400, message: 'Invalid group!', messageKey: 'invalid_group'};
             const marathon = await MarathonModel.findOne({_id: data.marathonId})
             if (!marathon) return {
                 message: 'marathon does not existed',
@@ -61,7 +63,7 @@ module.exports = {
             }
         })
     },
-    get:  (req) => {
+    get: (req) => {
         const {keyword, groupId, marathonId, groupCode, groupName, fullName, email, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = {}
         const keywordCondition = keyword ? { $or:[
