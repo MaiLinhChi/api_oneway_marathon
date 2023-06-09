@@ -39,7 +39,7 @@ module.exports = {
         return Model.findOne({[keyQuery]: id}).select('-password -__v -createdAt').lean().then(async data => {
             if (!data) return {
                 message: 'Grounp does not exist',
-                messageKey: 'group_not_found',
+                messageKey: 'invalid_group',
                 status: false,
                 statusCode: 404
             }
