@@ -64,7 +64,7 @@ module.exports = {
         })
     },
     get: (req) => {
-        const {keyword, groupId, marathonId, groupCode, groupName, fullName, email, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
+        const {keyword, groupId, marathonId, groupCode, groupName, fullName, email, emailMember, phone, role, fromDate, toDate, pageSize, pageIndex} = req.query
         const options = {}
         const keywordCondition = keyword ? { $or:[
             { groupId: { $regex: keyword, $options: 'i'} },  
@@ -86,7 +86,8 @@ module.exports = {
         if(groupCode) options.groupCode = groupCode
         if(fullName) options.fullName = { $regex: new RegExp(req.query.fullName), $options: 'i' }
         if(phone) options.phone = phone
-        if(email) options.membership = {$elemMatch: {email}}
+        if(email) options.email = email
+        if(emailMember) options.membership = {$elemMatch: {emailMember}}
         if(role) options.membership = {$elemMatch: {role}}
         // if(fullName) options.membership = {$elemMatch: {fullName: { $regex: new RegExp(req.query.fullName), $options: 'i' }}}
         if(fromDate || toDate) options.CreatedOn = {}
@@ -133,13 +134,6 @@ module.exports = {
                 } else {
                     req.payload.password = hash;
                     req.payload.updatedBy = 'register';
-                    const owner = {
-                        fullName: req.payload.fullName,
-                        email: req.payload.email,
-                        phone: req.payload.phone,
-                        role: 'leader',
-                        timeJoined: moment().unix()
-                    }
                     let randomString
                     let isExistCode
                     do {
@@ -147,7 +141,6 @@ module.exports = {
                         isExistCode = await Model.findOne({groupCode: randomString})
                     } while (isExistCode)
                     req.payload.groupCode = randomString
-                    req.payload.membership = [owner]
                     req.payload.linkJoin = `${process.env.URL_CLIENT}/${marathon.slug}/${randomString}`
                     const model = new Model(req.payload)
                     model.save().then(async (rs) => {
@@ -182,7 +175,7 @@ module.exports = {
         const group = await Model.findOne({_id: req.params.id});
         if(!group) return {statusCode: 400, message: 'Group does not existed !', messageKey: 'group_not_existed'};
         const exitEmail = group.membership.find((member) => member.email === req.payload.email);
-        if(exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
+        if(!exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
         try {
             const res = await Model.findByIdAndUpdate(req.params.id, {$push: {membership: {
                 fullName: req.payload.fullName,
@@ -283,9 +276,10 @@ module.exports = {
             if (!user) return {statusCode: 404, message: 'user does not exist', messageKey: 'user_not_found'}
             const group = await Model.findById(id)
             if (!group) return {statusCode: 404, message: 'group does not exist', messageKey: 'group_not_found'}
-            const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
-            if (!leader || leader.email !== leaderEmail) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
+            const leader = group.email === leaderEmail;
+            if (!leader) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
             if (leader.email === email) return {message: 'You can not remove yourself', messageKey: 'not_remove_yourself', statusCode: 403}
+            console.log(group, email);
             const removedUser = group.membership.find(m => m.email === email)
             if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             // const bib = await BibModel.findById(req.payload.bibId);

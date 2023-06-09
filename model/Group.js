@@ -12,17 +12,18 @@ const schema = new Schema({
    type: String,
    trim: true
  },
- password: String,
- status: {
+ email: String,
+ phone: String,
+ fullName: {
    type: String,
-   enum: ['pending', 'active'],
-   default: 'pending'
-},
+   trim: true
+ },
+ password: String,
  membership: [
    {
       role: {
          type: String,
-         enum: ['leader', 'vice', 'member'],
+         enum: ['vice', 'member'],
          default: 'member'
       },
       email: String,
@@ -34,7 +35,6 @@ const schema = new Schema({
       timeJoined: Number
    }
  ],
- sendEmail: { type: Boolean, default: false },
  updatedAt: String,
  updatedBy: String,
  createdAt: String,

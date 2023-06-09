@@ -63,6 +63,7 @@ module.exports = {
         groupCode: Joi.string().optional(),
         fullName: Joi.string().optional(),
         email: Joi.string().optional(),
+        emailMember: Joi.string().optional(),
         phone: Joi.string().optional(),
         role: Joi.string().optional(),
         status: Joi.string().optional(),

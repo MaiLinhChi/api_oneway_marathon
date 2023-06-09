@@ -1,5 +1,5 @@
 module.exports = {
-    sendEmailCreateGroup: (group, url) => {
+    sendEmailCreateGroup: (group, imageEmail, url) => {
         return (
             `
                 <!DOCTYPE html>
@@ -71,11 +71,11 @@ module.exports = {
                     </head>
                     <body>
                         <div class="wrapper">
-                            <img src="https://drive.google.com/uc?export=view&id=1Uj2MW6zHeTtsQ2xNfQDUq5L09Ow2JLei" style="width: 100%; max-width: 768px;">
+                            <img src=${imageEmail} style="width: 100%; max-width: 768px;">
                             <div class="wrapper-top">
                                 <h1>Tạo nhóm thành công - OneWay Marathon</h1>
                                 <p class="font-size">
-                                    Xin chào ${group.membership[0].fullName}, <br />
+                                    Xin chào ${group.fullName}, <br />
                                     Bạn đã khởi tạo nhóm ${group.groupName} tại giải ${group.marathonName}. Link gửi cho các thành viên <br />
                                     khác để cùng đăng ký bạn nhé!
                                 </p>
@@ -85,15 +85,15 @@ module.exports = {
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Họ và tên trưởng nhóm</td>
-                                        <td><strong>${group.membership[0].fullName}</strong></td>
+                                        <td><strong>${group.fullName}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Số điện thoại</td>
-                                        <td><strong>${group.membership[0].phone}</strong></td>
+                                        <td><strong>${group.phone}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${group.email}</strong></td>
                                     </tr>
                                 </table>
                                 <h2>Link đăng ký nhóm</h1>
