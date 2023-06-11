@@ -22,10 +22,19 @@ module.exports = {
     },
     putOrderById: async (req) => {
         const { id } = req.params;
+        const { products, total } = req.payload;
         try {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const order = await Model.findOneAndUpdate({_id: id}, req.payload, {new: true});
+            const order = await Model.findById({_id: id});
             if (!order) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
+            if (total !== order.total) {
+                await Promise.all(
+                    products.map(
+                        item => BibModel.findByIdAndUpdate({_id: item.productId}, {$set: {'marathon.price': item.price, 'marathon.state': item.state}})
+                    )
+                )
+            }
+            await Model.findByIdAndUpdate({_id: id}, req.payload, {new: true});
             return {
                 message: "Update order detail successfully",
                 messageKey: "update_order_detail_successfully",
@@ -42,7 +51,8 @@ module.exports = {
             if (!mongoose.Types.ObjectId.isValid(id)) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
             const order = await Model.findOne({_id: id}).lean();
             if (!order) return {message: `Order not exist with id: ${id}`, messageKey: `not_exist_with_id: ${id}`, statusCode: 404};
-            const bibs = await BibModel.find({_id : { $in : order.products }});
+            const idValues = order.products.map(obj => obj.productId);
+            const bibs = await BibModel.find({_id: { $in: idValues }});
             const data = {
                 order,
                 bibs,
@@ -105,7 +115,6 @@ module.exports = {
         const options = {}
         const skip =  req.query.skip || 0
         const limit = req.query.limit || 20
-        // const sort = req.query.sort || 'desc'
         const sort = req.query.sort || -1
         if (type) {
             if (type === 'group') {
@@ -121,28 +130,13 @@ module.exports = {
         if(groupId) options.groupId = groupId
         if(marathonId) options.marathonId = marathonId
         if(fromDate && toDate) options.startTime = {$gte: fromDate, $lte: toDate}
-        // return Model.find({$and: [options]}).limit(limit).skip(skip * limit).sort({
-        //     createdAt: sort
-        // }).then(async rs => {
-        //     const totalRecord = await Model.countDocuments(options)
-            
-        //     return {
-        //         data: rs,
-        //         status: 200,
-        //         message: "Get list orders successfully",
-        //         messageKey: "get_list_orders_successfully",
-        //         totalRecord,
-        //         totalPage: Math.ceil(totalRecord / limit),
-        //     }
-        // })
-
         const res = await Model.aggregate([
             {$match: {$and: [options]}},
             {$skip: skip * limit},
             {$limit: limit},
             {$sort: {createdAt: sort}},
             { "$unwind": "$products" },
-            {$addFields: {"idSearch": {"$toObjectId": "$products"}}},
+            {$addFields: {"idSearch": {"$toObjectId": "$products.productId"}}},
             {$lookup: {
                 from: 'bibs',
                 foreignField: '_id',
@@ -176,7 +170,7 @@ module.exports = {
             }
     },
     postOrder: async (req) => {
-        const { groupId, email } = req.payload
+        const { groupId, email, products } = req.payload
         if (groupId) {
             if (!mongoose.Types.ObjectId.isValid(groupId)) return {
                 message: 'group not found',
@@ -189,13 +183,16 @@ module.exports = {
                 messageKey: 'group_not_found',
                 statusCode: 404,
             }
-            const leader = group.membership.find(e => e.email === email && e.role === 'leader')
+            const leader = group.email === email;
             if (!leader) return {
                 message: "You're not leader of this group",
                 messageKey: 'not_permission',
                 statusCode: 403,
             }
         }
+        await Promise.all(
+            products.map(item => BibModel.findByIdAndUpdate({_id: item.productId}, {$set: {'marathon.price': item.price, 'marathon.state': item.state}}))
+        )
         const model = new Model(req.payload)
         return new Promise(resolve => {
             model.save().then((obj) => resolve({statusCode: 200, data: obj, message: "Order suscessfully", messageKey: "order_suscessfully"})).catch(e => {

@@ -10,7 +10,11 @@ const schema = new Schema({
    ref: "groups"
  },
  marathonId: String,
- products: [String],
+ products: [{
+   productId: String,
+   price: Number,
+   state: String,
+ }],
  payment: {
     gateway: String,
     bankCode: String,

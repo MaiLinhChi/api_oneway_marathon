@@ -75,15 +75,15 @@ module.exports = {
                                 <table style="width:100%" class="font-size">
                                     <tr>
                                         <td>Họ và tên trưởng nhóm</td>
-                                        <td><strong>${group.membership[0].fullName}</strong></td>
+                                        <td><strong>${group.fullName}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Số điện thoại</td>
-                                        <td><strong>${group.membership[0].phone}</strong></td>
+                                        <td><strong>${group.phone}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td><strong>${group.membership[0].email}</strong></td>
+                                        <td><strong>${group.email}</strong></td>
                                     </tr>
                                 </table>
                             </div>

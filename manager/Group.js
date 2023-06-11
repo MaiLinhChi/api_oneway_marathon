@@ -175,7 +175,7 @@ module.exports = {
         const group = await Model.findOne({_id: req.params.id});
         if(!group) return {statusCode: 400, message: 'Group does not existed !', messageKey: 'group_not_existed'};
         const exitEmail = group.membership.find((member) => member.email === req.payload.email);
-        if(!exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
+        if(exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
         try {
             const res = await Model.findByIdAndUpdate(req.params.id, {$push: {membership: {
                 fullName: req.payload.fullName,
@@ -206,17 +206,18 @@ module.exports = {
         const leaderEmail = req.auth.credentials.user.email
         if (!mongoose.Types.ObjectId.isValid(id))
             return { message: `No group with id: ${id}`, statusCode: 404 };
-        const group = await Model.findByIdAndDelete({ _id: id });
-        if (!group)
+        const groupExist = await Model.findById({ _id: id });
+        if (!groupExist)
             return {
             message: "Not found group",
             status: false,
             statusCode: 404,
             messageKey: "group_not_found",
-            data: group,
+            data: groupExist,
             };
-        const leader = group.membership.find(m => m.role === 'leader' && m.email === leaderEmail)
+        const leader = groupExist.email === leaderEmail
         if (!leader) return {message: 'You can not delete this group', statusCode: 403, messageKey: 'not_permission'}
+        const group = await Model.findByIdAndDelete({ _id: id });
         const messages = group.membership.map(member => {
             return  {
                 to: member.email, // Change to your recipient
@@ -231,6 +232,7 @@ module.exports = {
             console.log(error)
         }
         return {
+            messageKey: 'delete_group_success',
             message: "Delete group success",
             data: group,
             status: 200,
@@ -279,7 +281,6 @@ module.exports = {
             const leader = group.email === leaderEmail;
             if (!leader) return {message: 'You can not remove member', statusCode: 403, messageKey: 'not_permission'}
             if (leader.email === email) return {message: 'You can not remove yourself', messageKey: 'not_remove_yourself', statusCode: 403}
-            console.log(group, email);
             const removedUser = group.membership.find(m => m.email === email)
             if (!removedUser) return {statusCode: 404, message: 'this user does not exist in this group', messageKey: 'user_not_in_group'}
             // const bib = await BibModel.findById(req.payload.bibId);
