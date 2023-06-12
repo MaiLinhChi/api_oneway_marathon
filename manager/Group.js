@@ -43,7 +43,7 @@ module.exports = {
                 status: false,
                 statusCode: 404
             }
-            const order = await OrderModel.findOne({groupId: data._id})
+            const order = await OrderModel.findOne({groupId: data._id, status: "confirmed"})
             if (order) return {statusCode: 400, message: 'Invalid group!', messageKey: 'invalid_group'};
             const marathon = await MarathonModel.findOne({_id: data.marathonId})
             if (!marathon) return {
@@ -175,15 +175,22 @@ module.exports = {
         const group = await Model.findOne({_id: req.params.id});
         if(!group) return {statusCode: 400, message: 'Group does not existed !', messageKey: 'group_not_existed'};
         const exitEmail = group.membership.find((member) => member.email === req.payload.email);
-        if(exitEmail) return {statusCode: 400, message: 'You have joined this group!', messageKey: 'group_not_existed'};
+        const {_id} = req.payload
+        if (_id) {
+            await BibModel.findByIdAndDelete(_id)
+        }
+        const bibModel = new BibModel(req.payload);
+        const bib = await bibModel.save();
+        let res;
         try {
-            const res = await Model.findByIdAndUpdate(req.params.id, {$push: {membership: {
-                fullName: req.payload.fullName,
-                email: req.payload.email,
-                phone: req.payload.phone,
-                timeJoined: moment().unix()
-            }}}, {new: true});
-            const bib = await BibModel.findById(req.payload.bibId);
+            if (!exitEmail) {
+                res = await Model.findByIdAndUpdate(req.params.id, {$push: {membership: {
+                    fullName: req.payload.fullName,
+                    email: req.payload.email,
+                    phone: req.payload.phone,
+                    timeJoined: moment().unix()
+                }}}, {new: true});
+            }
             const msg = {
                 to: req.payload.email, // Change to your recipient
                 from: 'admin@onewaymarathon.com', // Change to your verified sender
@@ -192,7 +199,10 @@ module.exports = {
             }
             await sendgrid.send(msg);
             return {
-                data: res,
+                data: {
+                    group: res || group,
+                    bib
+                },
                 message: 'Join the group successfully',
                 messageKey: 'join_group_successfully'
             };
